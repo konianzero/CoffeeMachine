@@ -2,16 +2,35 @@
 <configuration scan="true" scanPeriod="30 seconds">
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
         <encoder>
             <charset>UTF-8</charset>
             <pattern>%-61(%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{0})) : %green(%msg%n)</pattern>
         </encoder>
     </appender>
 
-    <logger name="net.coffeemachine" level="info"/>
-    <logger name="org.springframework.web.servlet" level="debug"/>
+    <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
+        <filter class="net.coffeemachine.util.LoggerNameFilter" />
 
-    <root level="debug">
-        <appender-ref ref="console"/>logging
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>org.postgresql.Driver</driverClass>
+            <url>jdbc:postgresql://localhost:5432/coffeemachine</url>
+            <user>machine</user>
+            <password>pass</password> <!-- no password -->
+            <sqlDialect class="ch.qos.logback.core.db.dialect.PostgreSQLDialect"/>
+        </connectionSource>
+    </appender>
+
+    <logger name="net.coffeemachine" level="info"/>
+    <logger name="org.springframework.web.servlet" level="info"/>
+
+    <root level="info">
+        <appender-ref ref="console"/>
+        <appender-ref ref="db" />
     </root>
 </configuration>

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.coffeemachine.control</groupId>
-    <artifactId>coffee-machine</artifactId>
+    <groupId>net.coffeemachine</groupId>
+    <artifactId>coffee-machine-control</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -27,7 +27,7 @@
     </properties>
 
     <build>
-        <finalName>control</finalName>
+        <finalName>machine</finalName>
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
@@ -62,8 +62,8 @@
                     </configuration>
                     <deployables>
                         <deployable>
-                            <groupId>net.coffeemachine.control</groupId>
-                            <artifactId>coffee-machine</artifactId>
+                            <groupId>net.coffeemachine</groupId>
+                            <artifactId>coffee-machine-control</artifactId>
                             <type>war</type>
                             <properties>
                                 <context>${project.build.finalName}</context>
@@ -124,13 +124,21 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.3-1101-jdbc41</version>
         </dependency>
         <!-- Swagger -->
         <dependency>
