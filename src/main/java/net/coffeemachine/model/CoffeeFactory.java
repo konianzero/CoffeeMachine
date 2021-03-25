@@ -2,7 +2,6 @@ package net.coffeemachine.model;
 
 import net.coffeemachine.model.coffee.*;
 import net.coffeemachine.service.CoffeeMachine;
-import net.coffeemachine.util.exception.NoCoffeeTypeException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,8 +26,6 @@ public class CoffeeFactory {
             case LATTE:
                 coffee = new Latte(coffeeMachine);
                 break;
-//            default:
-//                throw new NoCoffeeTypeException("Coffee machine does not have this type of coffee: " + type);
         }
 
         coffee.prepare();
