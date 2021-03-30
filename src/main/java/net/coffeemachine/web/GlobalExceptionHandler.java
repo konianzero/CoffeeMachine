@@ -1,10 +1,8 @@
 package net.coffeemachine.web;
 
-import net.coffeemachine.util.exception.ErrorInfo;
-import net.coffeemachine.util.exception.ErrorType;
-import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,7 +10,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static net.coffeemachine.util.exception.ErrorType.*;
+import net.coffeemachine.util.exception.ErrorInfo;
+import net.coffeemachine.util.exception.ErrorType;
+import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,17 +20,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorInfo> wrongRequest(HttpServletRequest req, NoHandlerFoundException e) {
-        return logAndGetErrorInfo(req, e, WRONG_REQUEST);
+        return logAndGetErrorInfo(req, e, ErrorType.WRONG_REQUEST);
     }
 
     @ExceptionHandler(NotEnoughSuppliesException.class)
     public ResponseEntity<ErrorInfo> handleError(HttpServletRequest req, NotEnoughSuppliesException e) {
-        return logAndGetErrorInfo(req, e, NOT_ENOUGH_SUPPLIES);
+        return logAndGetErrorInfo(req, e, ErrorType.NOT_ENOUGH_SUPPLIES);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorInfo> handleError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, APP_ERROR);
+        return logAndGetErrorInfo(req, e, ErrorType.APP_ERROR);
     }
 
     private ResponseEntity<ErrorInfo> logAndGetErrorInfo(HttpServletRequest req, Exception e, ErrorType errorType) {

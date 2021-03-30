@@ -1,5 +1,14 @@
 package net.coffeemachine.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.stereotype.Component;
+
+import java.util.StringJoiner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import net.coffeemachine.model.CoffeeFactory;
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
@@ -8,13 +17,6 @@ import net.coffeemachine.service.states.State;
 import net.coffeemachine.service.states.StopState;
 import net.coffeemachine.to.Info;
 import net.coffeemachine.util.exception.NotEnoughSuppliesException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import java.util.StringJoiner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Component
 public class CoffeeMachine {
@@ -47,10 +49,10 @@ public class CoffeeMachine {
 
     public void makeCoffee(CoffeeType coffeeType) {
         Coffee coffee = coffeeFactory.createCoffee(coffeeType);
-        log.info("Start making coffee " + coffee.getName().toLowerCase());
+        log.info("Start making coffee {}", coffee.getName());
         service.submit(() -> {
             processing(coffee.getTimeToMake());
-            log.info("coffee " + coffee.getName().toLowerCase() + " is ready");
+            log.info("Coffee {} is ready", coffee.getName());
             changeState(new ReadyState(this));
         });
     }
@@ -87,6 +89,7 @@ public class CoffeeMachine {
     }
 
     public void appendSupplies(int water, int milk, int beans, int cups) {
+        log.debug("Add supplies:\n - water:{}\n - milk:{}\n - beans:{}\n - cups:{}", water, milk, beans, cups);
         this.water +=water;
         this.milk +=milk;
         this.beans += beans;
@@ -115,7 +118,6 @@ public class CoffeeMachine {
         }
 
         if (notEnough.length() != 0) {
-            log.info("Not enough " + notEnough);
             throw new NotEnoughSuppliesException("Not enough " + notEnough);
         }
         return true;

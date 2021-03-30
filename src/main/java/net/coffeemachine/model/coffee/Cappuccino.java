@@ -5,7 +5,7 @@ import net.coffeemachine.service.CoffeeMachine;
 public class Cappuccino extends Coffee {
     public Cappuccino(CoffeeMachine coffeeMachine) {
         super(coffeeMachine);
-        name = CoffeeType.CAPPUCCINO.name();
+        name = CoffeeType.CAPPUCCINO.name().toLowerCase();
         timeToMake = 45000;
         water = 200;
         milk = 100;
