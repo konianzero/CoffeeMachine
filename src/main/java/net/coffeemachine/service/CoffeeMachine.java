@@ -1,7 +1,6 @@
 package net.coffeemachine.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Component;
 
@@ -19,10 +18,10 @@ import net.coffeemachine.to.Info;
 import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 
 @Component
+@Slf4j
 public class CoffeeMachine {
 
     private static final int CUPS_NUM = 1;
-    private static final Logger log = LoggerFactory.getLogger(CoffeeMachine.class);
 
     private final CoffeeFactory coffeeFactory;
     private final ExecutorService service;

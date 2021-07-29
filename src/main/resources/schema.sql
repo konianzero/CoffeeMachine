@@ -1,23 +1,20 @@
--- https://github.com/qos-ch/logback/blob/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script/postgresql.sql
-
+-- https://github.com/qos-ch/logback/blob/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script/
 -- Logback: the reliable, generic, fast and flexible logging framework.
 -- Copyright (C) 1999-2010, QOS.ch. All rights reserved.
 --
 -- See http://logback.qos.ch/license.html for the applicable licensing
 -- conditions.
-
--- This SQL script creates the required tables by ch.qos.logback.classic.db.DBAppender
+-- This SQL script creates the required tables by ch.qos.logback.classic.db.DBAppender.
 --
--- It is intended for PostgreSQL databases.
+
+-- It is intended for Postgres databases.
 
 DROP TABLE    logging_event_property;
 DROP TABLE    logging_event_exception;
 DROP TABLE    logging_event;
 DROP SEQUENCE logging_event_id_seq;
 
-
 CREATE SEQUENCE logging_event_id_seq MINVALUE 1 START 1;
-
 
 CREATE TABLE logging_event
 (

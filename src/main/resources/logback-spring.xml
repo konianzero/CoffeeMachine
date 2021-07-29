@@ -1,20 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds" debug="true">
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%-61(%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{0})) : %green(%msg%n)</pattern>
+            <pattern>%-61(%d{HH:mm:ss.SSS} %highlight(%-5level) %magenta(${PID:- }) [%15.15t] %cyan(%-40.40logger{0})) : %green(%msg%n)</pattern>
         </encoder>
     </appender>
 
-    <property resource="db/database.properties" />
+    <property resource="application.yaml" />
+
+    <springProperty name="driver" source="spring.datasource.driver-class-name"/>
+    <springProperty name="url" source="spring.datasource.url"/>
+    <springProperty name="user" source="spring.datasource.username"/>
+    <springProperty name="password" source="spring.datasource.password"/>
 
     <appender name="db" class="ch.qos.logback.classic.db.DBAppender">
 
         <filter class="net.coffeemachine.util.LoggerNameFilter" />
 
-        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">-->
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
             <driverClass>${driver}</driverClass>
             <url>${url}</url>
             <user>${user}</user>
@@ -23,12 +27,11 @@
     </appender>
 
     <logger name="org.springframework" level="info"/>
-    <logger name="springfox" level="warn"/>
     <logger name="net.coffeemachine" level="info">
         <appender-ref ref="db"/>
     </logger>
 
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="console"/>
     </root>
 </configuration>

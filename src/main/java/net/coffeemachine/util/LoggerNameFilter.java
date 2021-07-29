@@ -8,10 +8,8 @@ public class LoggerNameFilter extends Filter<ILoggingEvent> {
 
     @Override
     public FilterReply decide(ILoggingEvent event) {
-        if (event.getLoggerName().contains("CoffeeMachine")) {
-            return FilterReply.ACCEPT;
-        } else {
-            return FilterReply.DENY;
-        }
+        return event.getLoggerName().endsWith("CoffeeMachine")
+                ? FilterReply.ACCEPT
+                : FilterReply.DENY;
     }
 }

@@ -1,5 +1,7 @@
 package net.coffeemachine.web.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,17 +10,15 @@ import net.coffeemachine.model.coffee.CoffeeType;
 import net.coffeemachine.service.CoffeeMachine;
 
 @RestController
+@AllArgsConstructor
+@Tag(name = "CoffeeMachine Controller")
 @RequestMapping(value = CoffeeMachineController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CoffeeMachineController {
-    public static final String REST_URL = "/control";
+    public static final String REST_URL = "/coffeemachine/control";
 
     private final CoffeeMachine coffeeMachine;
 
-    public CoffeeMachineController(CoffeeMachine coffeeMachine) {
-        this.coffeeMachine = coffeeMachine;
-    }
-
-    @PatchMapping("/start")
+    @PatchMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
     public Info start() {
         return coffeeMachine.getState().onStart();
     }
