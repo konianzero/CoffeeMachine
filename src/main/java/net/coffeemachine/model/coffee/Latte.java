@@ -1,10 +1,7 @@
 package net.coffeemachine.model.coffee;
 
-import net.coffeemachine.service.CoffeeMachine;
-
 public class Latte extends Coffee {
-    public Latte(CoffeeMachine coffeeMachine) {
-        super(coffeeMachine);
+    public Latte() {
         name = CoffeeType.LATTE.name().toLowerCase();
         timeToMake = 30000;
         water = 350;

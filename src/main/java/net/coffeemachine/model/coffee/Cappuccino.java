@@ -1,10 +1,7 @@
 package net.coffeemachine.model.coffee;
 
-import net.coffeemachine.service.CoffeeMachine;
-
 public class Cappuccino extends Coffee {
-    public Cappuccino(CoffeeMachine coffeeMachine) {
-        super(coffeeMachine);
+    public Cappuccino() {
         name = CoffeeType.CAPPUCCINO.name().toLowerCase();
         timeToMake = 45000;
         water = 200;

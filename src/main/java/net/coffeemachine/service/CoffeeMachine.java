@@ -1,12 +1,17 @@
 package net.coffeemachine.service;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.stereotype.Component;
-
 import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import net.coffeemachine.model.CoffeeFactory;
 import net.coffeemachine.model.coffee.Coffee;
@@ -19,19 +24,33 @@ import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 
 @Component
 @Slf4j
+@ToString
 public class CoffeeMachine {
 
     private static final int CUPS_NUM = 1;
 
-    private final CoffeeFactory coffeeFactory;
-    private final ExecutorService service;
-
+    @ToString.Exclude
+    @Autowired
+    private ExecutorService coffeeMachineService;
+    @ToString.Exclude
+    @Autowired
+    private CoffeeFactory coffeeFactory;
+    @ToString.Exclude
     private State state;
 
+    @Value("${app.coffee-machine.water}")
     private int water;
+    @Value("${app.coffee-machine.milk}")
     private int milk;
+    @Value("${app.coffee-machine.beans}")
     private int beans;
+    @Value("${app.coffee-machine.cups}")
     private int cups;
+
+    @PostConstruct
+    public void init() {
+        turnOn();
+    }
 
     public State getState() {
         return state;
@@ -46,10 +65,13 @@ public class CoffeeMachine {
         changeState(new ReadyState(this));
     }
 
+    // TODO - move logging to BPP or AOP
     public void makeCoffee(CoffeeType coffeeType) {
-        Coffee coffee = coffeeFactory.createCoffee(coffeeType);
+        Coffee coffee = coffeeFactory.getCoffee(coffeeType);
+        checkSupplies(coffee);
         log.info("Start making coffee {}", coffee.getName());
-        service.submit(() -> {
+        coffeeMachineService.submit(() -> {
+            allocateSupplies(coffee);
             processing(coffee.getTimeToMake());
             log.info("Coffee {} is ready", coffee.getName());
             changeState(new ReadyState(this));
@@ -58,7 +80,7 @@ public class CoffeeMachine {
 
     public void clean() {
         log.info("Start cleaning coffee machine");
-        service.submit(() -> {
+        coffeeMachineService.submit(() -> {
             processing(60000);
             log.info("Coffee machine is clean");
             changeState(new ReadyState(this));
@@ -66,7 +88,7 @@ public class CoffeeMachine {
     }
 
     public Info remainsSupplies() {
-        String info = "Coffee machine " + suppliesToString();
+        String info = "Remain supplies of " + this;
         log.info(info);
         return new Info(info);
     }
@@ -76,18 +98,11 @@ public class CoffeeMachine {
         changeState(new StopState(this));
     }
 
-    public CoffeeMachine(CoffeeFactory coffeeFactory) {
-        state = new ReadyState(this);
-
-        this.coffeeFactory = coffeeFactory;
-        coffeeFactory.setCoffeeMachine(this);
-
-        service = Executors.newSingleThreadExecutor();
-
-        appendSupplies(500, 540, 120, 9);
-    }
-
-    public void appendSupplies(int water, int milk, int beans, int cups) {
+    /**
+     * @deprecated (not in use anymore).
+     */
+    @Deprecated(since = "v2.1")
+    private void appendSupplies(int water, int milk, int beans, int cups) {
         log.debug("Add supplies:\n - water:{}\n - milk:{}\n - beans:{}\n - cups:{}", water, milk, beans, cups);
         this.water +=water;
         this.milk +=milk;
@@ -95,47 +110,40 @@ public class CoffeeMachine {
         this.cups += cups;
     }
 
-    public void allocateSupplies(int water, int milk, int beans) {
-        if (isEnoughSupplies(water, milk, beans)) {
-            this.water -= water;
-            this.milk -= milk;
-            this.beans -= beans;
-            this.cups -= CUPS_NUM;
-        }
+    private void allocateSupplies(Coffee coffee) {
+        this.water -= coffee.getWater();
+        this.milk -= coffee.getMilk();
+        this.beans -= coffee.getBeans();
+        this.cups -= CUPS_NUM;
     }
 
-    private boolean isEnoughSupplies(int water, int milk, int beans) {
+    private void checkSupplies(Coffee coffee) {
         StringJoiner notEnough = new StringJoiner(", ");
-        if (this.water - water < 0) {
+        if (this.water - coffee.getWater() < 0) {
             notEnough.add("water");
-        } else if (this.milk - milk < 0) {
+        }
+        if (this.milk - coffee.getMilk() < 0) {
             notEnough.add("milk");
-        } else if (this.beans - beans < 0) {
+        }
+        if (this.beans - coffee.getBeans() < 0) {
             notEnough.add("beans");
-        } else if (this.cups - CUPS_NUM < 0) {
+        }
+        if (this.cups - CUPS_NUM < 0) {
             notEnough.add("cups");
         }
 
         if (notEnough.length() != 0) {
             throw new NotEnoughSuppliesException("Not enough " + notEnough);
         }
-        return true;
     }
 
+    // TODO - Add throws Exception to method to create more informative log
     private void processing(int millis) {
         try {
             Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ie) {
+            log.warn("Stop processing!", ie);
+            Thread.currentThread().interrupt();
         }
-    }
-
-    public String suppliesToString() {
-        return "Remain supplies {" +
-                "water=" + water +
-                ", milk=" + milk +
-                ", beans=" + beans +
-                ", cups=" + cups +
-                '}';
     }
 }
