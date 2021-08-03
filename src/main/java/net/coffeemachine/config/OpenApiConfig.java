@@ -2,6 +2,7 @@ package net.coffeemachine.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 title = "REST API documentation",
-                version = "2.0",
+                version = "2.1.1",
                 description = "A program for managing a coffee machine through a browser"
         )
 )

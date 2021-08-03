@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public abstract class Coffee {
-    protected String name;
     protected int timeToMake;
     protected int water;
     protected int milk;
     protected int beans;
+
+    public abstract CoffeeType getType();
 }

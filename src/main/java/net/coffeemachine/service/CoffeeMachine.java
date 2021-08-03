@@ -1,8 +1,8 @@
 package net.coffeemachine.service;
 
+import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import net.coffeemachine.model.CoffeeFactory;
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
 import net.coffeemachine.service.states.ReadyState;
@@ -34,7 +33,7 @@ public class CoffeeMachine {
     private ExecutorService coffeeMachineService;
     @ToString.Exclude
     @Autowired
-    private CoffeeFactory coffeeFactory;
+    private Map<CoffeeType, Coffee> coffeeFactory;
     @ToString.Exclude
     private State state;
 
@@ -67,13 +66,13 @@ public class CoffeeMachine {
 
     // TODO - move logging to BPP or AOP
     public void makeCoffee(CoffeeType coffeeType) {
-        Coffee coffee = coffeeFactory.getCoffee(coffeeType);
+        Coffee coffee = coffeeFactory.get(coffeeType);
         checkSupplies(coffee);
-        log.info("Start making coffee {}", coffee.getName());
+        log.info("Start making coffee {}", coffee.getType());
         coffeeMachineService.submit(() -> {
             allocateSupplies(coffee);
             processing(coffee.getTimeToMake());
-            log.info("Coffee {} is ready", coffee.getName());
+            log.info("Coffee {} is ready", coffee.getType());
             changeState(new ReadyState(this));
         });
     }
@@ -101,7 +100,7 @@ public class CoffeeMachine {
     /**
      * @deprecated (not in use anymore).
      */
-    @Deprecated(since = "v2.1")
+    @Deprecated(since = "v2.1.0")
     private void appendSupplies(int water, int milk, int beans, int cups) {
         log.debug("Add supplies:\n - water:{}\n - milk:{}\n - beans:{}\n - cups:{}", water, milk, beans, cups);
         this.water +=water;
