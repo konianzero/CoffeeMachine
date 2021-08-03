@@ -1,0 +1,5 @@
+coffee-machine:
+  water: 450
+  milk: 540
+  beans: 120
+  cups: 9

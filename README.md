@@ -1,6 +1,8 @@
 Управление кофеваркой через браузер
 -----------------------------------
 
+_**Spring Boot**_
+
 Программа по управлению кофеваркой через браузер.
 
 ---
@@ -9,6 +11,8 @@
 ```
 mvn spring-boot:run
 ```
+
+URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeemachine/control)
 
 ---
 
