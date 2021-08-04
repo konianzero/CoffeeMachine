@@ -7,7 +7,13 @@ _**Spring Boot**_
 
 ---
 
-**Запуск**
+### Требования
+- JDK 16
+- maven 3
+
+---
+
+### Запуск
 ```
 mvn spring-boot:run
 ```
@@ -16,7 +22,7 @@ URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeem
 
 ---
 
-## Документация API
+### Документация API
 
 [Swagger Api Documentation](http://localhost:8080/swagger-ui.html)
 

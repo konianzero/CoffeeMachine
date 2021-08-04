@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import net.coffeemachine.model.coffee.Coffee;
@@ -22,6 +23,7 @@ import net.coffeemachine.to.Info;
 import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 
 @Component
+@DependsOn({"dataSource"})
 @Slf4j
 @ToString
 public class CoffeeMachine {
@@ -37,13 +39,14 @@ public class CoffeeMachine {
     @ToString.Exclude
     private State state;
 
-    @Value("${app.coffee-machine.water}")
+    // TODO - move to separate class Ingredients
+    @Value("${coffee-machine.water}")
     private int water;
-    @Value("${app.coffee-machine.milk}")
+    @Value("${coffee-machine.milk}")
     private int milk;
-    @Value("${app.coffee-machine.beans}")
+    @Value("${coffee-machine.beans}")
     private int beans;
-    @Value("${app.coffee-machine.cups}")
+    @Value("${coffee-machine.cups}")
     private int cups;
 
     @PostConstruct

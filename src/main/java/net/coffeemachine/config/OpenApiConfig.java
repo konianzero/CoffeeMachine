@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "REST API documentation",
+                title = "Coffee machine REST API documentation",
                 version = "2.1.1",
                 description = "A program for managing a coffee machine through a browser"
         )
@@ -21,7 +21,7 @@ public class OpenApiConfig {
         public GroupedOpenApi api() {
                 return GroupedOpenApi.builder()
                         .group("REST API")
-                        .pathsToMatch("/coffeemachine/**")
+                        .pathsToMatch("/control/**")
                         .build();
         }
 }

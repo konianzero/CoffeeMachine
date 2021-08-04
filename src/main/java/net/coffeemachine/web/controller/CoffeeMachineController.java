@@ -14,7 +14,7 @@ import net.coffeemachine.service.CoffeeMachine;
 @Tag(name = "CoffeeMachine Controller")
 @RequestMapping(value = CoffeeMachineController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CoffeeMachineController {
-    public static final String REST_URL = "/coffeemachine/control";
+    public static final String REST_URL = "/control";
 
     private final CoffeeMachine coffeeMachine;
 
