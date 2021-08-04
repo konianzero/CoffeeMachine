@@ -11,7 +11,7 @@
 
     <groupId>net.coffeemachine</groupId>
     <artifactId>coffee-machine-control</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.2-SNAPSHOT</version>
 
     <name>Coffee machine control system</name>
     <description>A program for managing a coffee machine through a browser</description>

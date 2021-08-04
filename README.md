@@ -14,11 +14,25 @@ _**Spring Boot**_
 ---
 
 ### Запуск
+
+Профили:
+    
+- ```dev``` По умолчанию, база данных H2 (In memory)
+- ```prod``` База данных PostgreSQL
+
+Запуск
 ```
 mvn spring-boot:run
 ```
 
+Запуск с профилем ```prod```
+```
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+```
+
 URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeemachine/control)
+
+[H2 console](http://localhost:8080/coffeemachine/h2-console)
 
 ---
 

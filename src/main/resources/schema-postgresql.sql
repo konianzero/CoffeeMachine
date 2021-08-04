@@ -1,4 +1,4 @@
--- https://github.com/qos-ch/logback/blob/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script/
+-- https://github.com/qos-ch/logback/blob/master/logback-classic/src/main/resources/ch/qos/logback/classic/db/script/postgresql.sql
 -- Logback: the reliable, generic, fast and flexible logging framework.
 -- Copyright (C) 1999-2010, QOS.ch. All rights reserved.
 --
