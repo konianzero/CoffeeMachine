@@ -5,6 +5,8 @@ import net.coffeemachine.model.coffee.CoffeeType;
 
 import lombok.extern.slf4j.Slf4j;
 
+import net.coffeemachine.service.states.State;
+import net.coffeemachine.service.states.StateType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -23,6 +25,12 @@ public class AppConfig {
     public Map<CoffeeType, Coffee> coffeeFactory(List<Coffee> coffeeList) {
         log.info("Create coffee factory");
         return coffeeList.stream().collect(Collectors.toMap(Coffee::getType, Function.identity()));
+    }
+
+    @Bean
+    public Map<StateType, State> coffeeMachineState(List<State> states) {
+        log.info("Initializing coffee machine states");
+        return states.stream().collect(Collectors.toMap(State::getType, Function.identity()));
     }
 
     @Bean

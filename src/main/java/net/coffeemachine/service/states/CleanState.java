@@ -1,15 +1,17 @@
 package net.coffeemachine.service.states;
 
-import net.coffeemachine.service.CoffeeMachine;
+import org.springframework.stereotype.Component;
 
+// TODO - Stopping machine when clean
+@Component
 public class CleanState extends State {
 
-    public CleanState(CoffeeMachine machine) {
-        super(machine);
+    @Override
+    public StateType getType() {
+        return StateType.CLEAN;
     }
 
-    @Override
-    public String toString() {
+    public String getInfo() {
         return "Coffee Machine is cleaning, please wait.";
     }
 }

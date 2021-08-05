@@ -2,7 +2,6 @@ package net.coffeemachine.model.ingredients;
 
 import lombok.ToString;
 import net.coffeemachine.model.coffee.Coffee;
-import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,8 @@ import java.util.StringJoiner;
 @ToString(callSuper = true)
 public final class Supplies extends Ingredients {
     protected int cups;
+    @ToString.Exclude
+    protected StringJoiner notEnough;
 
     public Supplies(@Value("${coffee-machine.cups}") int cups,
                     @Value("${coffee-machine.water}") int water,
@@ -24,7 +25,7 @@ public final class Supplies extends Ingredients {
     }
 
     public void appendCups(int water) {
-        this.cups = water;
+        this.water = water;
     }
 
     public void appendWater(int cups) {
@@ -32,11 +33,15 @@ public final class Supplies extends Ingredients {
     }
 
     public void appendMilk(int milk) {
-        this.cups = milk;
+        this.milk = milk;
     }
 
     public void appendBeans(int beans) {
-        this.cups = beans;
+        this.beans = beans;
+    }
+
+    public String getNotEnough() {
+        return notEnough != null ? notEnough.toString() : "";
     }
 
     public void allocate(Coffee coffee) {
@@ -46,8 +51,8 @@ public final class Supplies extends Ingredients {
         this.cups -= 1;
     }
 
-    public void check(Coffee coffee) {
-        StringJoiner notEnough = new StringJoiner(", ");
+    public boolean isEnoughFor(Coffee coffee) {
+        notEnough = new StringJoiner(", ");
         if (this.water - coffee.getWater() < 0) {
             notEnough.add("water");
         }
@@ -61,8 +66,6 @@ public final class Supplies extends Ingredients {
             notEnough.add("cups");
         }
 
-        if (notEnough.length() != 0) {
-            throw new NotEnoughSuppliesException("Not enough " + notEnough);
-        }
+        return notEnough.length() == 0;
     }
 }

@@ -9,15 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import net.coffeemachine.model.ingredients.Supplies;
+import net.coffeemachine.service.states.*;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.states.ReadyState;
-import net.coffeemachine.service.states.State;
-import net.coffeemachine.service.states.StopState;
-import net.coffeemachine.to.Info;
+
+import static net.coffeemachine.service.states.StateType.*;
 
 @Component
 @DependsOn({"dataSource"})
@@ -27,12 +26,14 @@ public class CoffeeMachine {
 
     private final ExecutorService coffeeMachineService;
     private final Map<CoffeeType, Coffee> coffeeFactory;
+    private final Map<StateType, State> states;
     private final Supplies supplies;
 
     private State state;
 
     @PostConstruct
     public void init() {
+        states.forEach((k, v) -> v.setMachine(this));
         turnOn();
     }
 
@@ -40,51 +41,62 @@ public class CoffeeMachine {
         return state;
     }
 
-    public void changeState(State state) {
-        this.state = state;
+    public void changeStateTo(StateType stateType) {
+        this.state = states.get(stateType);
     }
 
-    public void turnOn() {
+    public String turnOn() {
         log.info("Turn on coffee machine");
-        changeState(new ReadyState(this));
+        changeStateTo(READY);
+        return "Turn on coffee machine";
     }
 
     // TODO - Move logging to BPP or AOP
-    public void makeCoffee(CoffeeType coffeeType) {
+    public String makeCoffee(CoffeeType coffeeType) {
+        changeStateTo(MAKE);
         Coffee coffee = coffeeFactory.get(coffeeType);
-        supplies.check(coffee);
+        if (!supplies.isEnoughFor(coffee)) {
+            log.info("Not enough ingredients for {}: {}", coffee.getType(), supplies.getNotEnough());
+            changeStateTo(READY);
+            return "Not enough ingredients";
+        }
+
         log.info("Start making coffee {}", coffee.getType());
         coffeeMachineService.submit(() -> {
             supplies.allocate(coffee);
             processing(coffee.getTimeToMake());
             log.info("Coffee {} is ready", coffee.getType());
-            changeState(new ReadyState(this));
+            changeStateTo(READY);
         });
+        return "Start making coffee";
     }
 
-    public void clean() {
+    public String clean() {
+        changeStateTo(CLEAN);
         log.info("Start cleaning coffee machine");
         coffeeMachineService.submit(() -> {
             processing(60000);
             log.info("Coffee machine is clean");
-            changeState(new ReadyState(this));
+            changeStateTo(READY);
         });
+        return "Start cleaning coffee machine";
     }
 
     // TODO - Show remains when clean or make coffee
-    public Info remainsSupplies() {
+    public String remainsSupplies() {
         String remains = supplies.toString();
         log.info(remains);
-        return new Info(remains);
+        return remains;
     }
 
     // TODO - Stop coffeeMachineService when turn of machine
-    public void turnOf() {
+    public String turnOf() {
         log.info("Turn of coffee machine");
-        changeState(new StopState(this));
+        changeStateTo(STOP);
+        return "Turn of coffee machine";
     }
 
-    // TODO - Add throws Exception to method to create more informative log
+    // TODO - Make more informative log
     private void processing(int millis) {
         try {
             Thread.sleep(millis);

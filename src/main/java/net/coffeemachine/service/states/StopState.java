@@ -1,23 +1,22 @@
 package net.coffeemachine.service.states;
 
 import net.coffeemachine.to.Info;
-import net.coffeemachine.service.CoffeeMachine;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StopState extends State {
-
-    public StopState(CoffeeMachine machine) {
-        super(machine);
-    }
 
     @Override
     public Info onStart() {
-        machine.turnOn();
-        machine.changeState(new ReadyState(machine));
-        return new Info("Coffee Machine is starting");
+        return new Info(machine.turnOn());
     }
 
     @Override
-    public String toString() {
+    public StateType getType() {
+        return StateType.STOP;
+    }
+
+    public String getInfo() {
         return "Coffee Machine is stopped";
     }
 }
