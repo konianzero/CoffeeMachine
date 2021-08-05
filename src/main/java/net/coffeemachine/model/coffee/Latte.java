@@ -1,14 +1,18 @@
 package net.coffeemachine.model.coffee;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Latte extends Coffee {
-    public Latte() {
-        timeToMake = 30000;
-        water = 350;
-        milk = 75;
-        beans = 20;
+public final class Latte extends Coffee {
+    public Latte(@Value("${latte.time-to-make}") int timeToMake,
+                 @Value("${latte.water}") int water,
+                 @Value("${latte.milk}") int milk,
+                 @Value("${latte.beans}") int beans) {
+        this.timeToMake = timeToMake;
+        this.water = water;
+        this.milk = milk;
+        this.beans = beans;
     }
 
     @Override

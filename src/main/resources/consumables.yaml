@@ -1,0 +1,22 @@
+coffee-machine:
+  water: 650
+  milk: 540
+  beans: 120
+  cups: 9
+
+espresso:
+  time-to-make: 20000
+  water: 250
+  beans: 16
+
+latte:
+  time-to-make: 30000
+  water: 350
+  milk: 75
+  beans: 20
+
+cappuccino:
+  time-to-make: 45000
+  water: 200
+  milk: 100
+  beans: 12

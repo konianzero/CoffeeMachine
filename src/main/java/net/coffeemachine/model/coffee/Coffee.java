@@ -1,13 +1,11 @@
 package net.coffeemachine.model.coffee;
 
 import lombok.Getter;
+import net.coffeemachine.model.ingredients.Ingredients;
 
 @Getter
-public abstract class Coffee {
+public abstract class Coffee extends Ingredients {
     protected int timeToMake;
-    protected int water;
-    protected int milk;
-    protected int beans;
 
     public abstract CoffeeType getType();
 }

@@ -2,7 +2,7 @@ spring:
   profiles:
     active: dev
   config:
-    import: ingredients.yaml
+    import: consumables.yaml
   jpa:
     hibernate:
       ddl-auto: none

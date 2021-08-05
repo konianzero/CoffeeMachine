@@ -1,16 +1,14 @@
 package net.coffeemachine.service;
 
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
 
 import javax.annotation.PostConstruct;
 
-import lombok.ToString;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import net.coffeemachine.model.ingredients.Supplies;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -20,34 +18,18 @@ import net.coffeemachine.service.states.ReadyState;
 import net.coffeemachine.service.states.State;
 import net.coffeemachine.service.states.StopState;
 import net.coffeemachine.to.Info;
-import net.coffeemachine.util.exception.NotEnoughSuppliesException;
 
 @Component
 @DependsOn({"dataSource"})
 @Slf4j
-@ToString
+@RequiredArgsConstructor
 public class CoffeeMachine {
 
-    private static final int CUPS_NUM = 1;
+    private final ExecutorService coffeeMachineService;
+    private final Map<CoffeeType, Coffee> coffeeFactory;
+    private final Supplies supplies;
 
-    @ToString.Exclude
-    @Autowired
-    private ExecutorService coffeeMachineService;
-    @ToString.Exclude
-    @Autowired
-    private Map<CoffeeType, Coffee> coffeeFactory;
-    @ToString.Exclude
     private State state;
-
-    // TODO - move to separate class Ingredients
-    @Value("${coffee-machine.water}")
-    private int water;
-    @Value("${coffee-machine.milk}")
-    private int milk;
-    @Value("${coffee-machine.beans}")
-    private int beans;
-    @Value("${coffee-machine.cups}")
-    private int cups;
 
     @PostConstruct
     public void init() {
@@ -67,13 +49,13 @@ public class CoffeeMachine {
         changeState(new ReadyState(this));
     }
 
-    // TODO - move logging to BPP or AOP
+    // TODO - Move logging to BPP or AOP
     public void makeCoffee(CoffeeType coffeeType) {
         Coffee coffee = coffeeFactory.get(coffeeType);
-        checkSupplies(coffee);
+        supplies.check(coffee);
         log.info("Start making coffee {}", coffee.getType());
         coffeeMachineService.submit(() -> {
-            allocateSupplies(coffee);
+            supplies.allocate(coffee);
             processing(coffee.getTimeToMake());
             log.info("Coffee {} is ready", coffee.getType());
             changeState(new ReadyState(this));
@@ -89,54 +71,17 @@ public class CoffeeMachine {
         });
     }
 
+    // TODO - Show remains when clean or make coffee
     public Info remainsSupplies() {
-        String info = "Remain supplies of " + this;
-        log.info(info);
-        return new Info(info);
+        String remains = supplies.toString();
+        log.info(remains);
+        return new Info(remains);
     }
 
+    // TODO - Stop coffeeMachineService when turn of machine
     public void turnOf() {
         log.info("Turn of coffee machine");
         changeState(new StopState(this));
-    }
-
-    /**
-     * @deprecated (not in use anymore).
-     */
-    @Deprecated(since = "v2.1.0")
-    private void appendSupplies(int water, int milk, int beans, int cups) {
-        log.debug("Add supplies:\n - water:{}\n - milk:{}\n - beans:{}\n - cups:{}", water, milk, beans, cups);
-        this.water +=water;
-        this.milk +=milk;
-        this.beans += beans;
-        this.cups += cups;
-    }
-
-    private void allocateSupplies(Coffee coffee) {
-        this.water -= coffee.getWater();
-        this.milk -= coffee.getMilk();
-        this.beans -= coffee.getBeans();
-        this.cups -= CUPS_NUM;
-    }
-
-    private void checkSupplies(Coffee coffee) {
-        StringJoiner notEnough = new StringJoiner(", ");
-        if (this.water - coffee.getWater() < 0) {
-            notEnough.add("water");
-        }
-        if (this.milk - coffee.getMilk() < 0) {
-            notEnough.add("milk");
-        }
-        if (this.beans - coffee.getBeans() < 0) {
-            notEnough.add("beans");
-        }
-        if (this.cups - CUPS_NUM < 0) {
-            notEnough.add("cups");
-        }
-
-        if (notEnough.length() != 0) {
-            throw new NotEnoughSuppliesException("Not enough " + notEnough);
-        }
     }
 
     // TODO - Add throws Exception to method to create more informative log
