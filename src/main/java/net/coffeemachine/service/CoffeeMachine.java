@@ -1,40 +1,50 @@
 package net.coffeemachine.service;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 import javax.annotation.PostConstruct;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import net.coffeemachine.model.ingredients.Supplies;
-import net.coffeemachine.service.states.*;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import net.coffeemachine.model.ingredients.Supplies;
+import net.coffeemachine.service.states.*;
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 import static net.coffeemachine.service.states.StateType.*;
 
+// TODO - Move logging to BPP or AOP
 @Component
 @DependsOn({"dataSource"})
 @Slf4j
 @RequiredArgsConstructor
 public class CoffeeMachine {
 
-    private final ExecutorService coffeeMachineService;
+    @NonNull
+    private ExecutorService coffeeMachineService;
     private final Map<CoffeeType, Coffee> coffeeFactory;
     private final Map<StateType, State> states;
     private final Supplies supplies;
 
     private State state;
+    private CompletableFuture<Void> runningTask;
 
     @PostConstruct
     public void init() {
         states.forEach((k, v) -> v.setMachine(this));
         turnOn();
+    }
+
+    @Lookup
+    public ExecutorService getCoffeeMachineService() {
+        return null;
     }
 
     public State getState() {
@@ -46,12 +56,12 @@ public class CoffeeMachine {
     }
 
     public String turnOn() {
-        log.info("Turn on coffee machine");
         changeStateTo(READY);
+        coffeeMachineService = getCoffeeMachineService();
+        log.info("Turn on coffee machine");
         return "Turn on coffee machine";
     }
 
-    // TODO - Move logging to BPP or AOP
     public String makeCoffee(CoffeeType coffeeType) {
         changeStateTo(MAKE);
         Coffee coffee = coffeeFactory.get(coffeeType);
@@ -62,46 +72,63 @@ public class CoffeeMachine {
         }
 
         log.info("Start making coffee {}", coffee.getType());
-        coffeeMachineService.submit(() -> {
-            supplies.allocate(coffee);
-            processing(coffee.getTimeToMake());
-            log.info("Coffee {} is ready", coffee.getType());
-            changeStateTo(READY);
-        });
+        supplies.allocate(coffee);
+        startTask(coffee.getTimeToMake(), String.format("Coffee %s is ready", coffee.getType()));
         return "Start making coffee";
     }
 
     public String clean() {
         changeStateTo(CLEAN);
         log.info("Start cleaning coffee machine");
-        coffeeMachineService.submit(() -> {
-            processing(60000);
-            log.info("Coffee machine is clean");
-            changeStateTo(READY);
-        });
+        startTask(60000, "Coffee machine is clean");
         return "Start cleaning coffee machine";
     }
 
-    // TODO - Show remains when clean or make coffee
     public String remainsSupplies() {
         String remains = supplies.toString();
         log.info(remains);
         return remains;
     }
 
-    // TODO - Stop coffeeMachineService when turn of machine
     public String turnOf() {
-        log.info("Turn of coffee machine");
         changeStateTo(STOP);
+        log.info("Turn of coffee machine");
+        if (runningTask != null) runningTask.cancel(true);
+        shutDownCoffeeMachineService();
         return "Turn of coffee machine";
     }
 
-    // TODO - Make more informative log
-    private void processing(int millis) {
+    private boolean processing(int millis) {
         try {
             Thread.sleep(millis);
+            return true;
         } catch (InterruptedException ie) {
             log.warn("Stop processing!", ie);
+            Thread.currentThread().interrupt();
+        }
+        return false;
+    }
+
+    private void startTask(int millis, String msg) {
+        runningTask = CompletableFuture
+                .supplyAsync(() -> processing(millis), coffeeMachineService)
+                .thenAccept(result -> {
+                    if (result) {
+                        log.info(msg);
+                        changeStateTo(READY);
+                    }
+                });
+    }
+
+    private void shutDownCoffeeMachineService() {
+        coffeeMachineService.shutdown();
+        try {
+            if (!coffeeMachineService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                coffeeMachineService.shutdownNow();
+            }
+        } catch (InterruptedException ie) {
+            log.warn("Stop coffee machine service!", ie);
+            coffeeMachineService.shutdownNow();
             Thread.currentThread().interrupt();
         }
     }

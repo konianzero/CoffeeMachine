@@ -2,9 +2,20 @@ package net.coffeemachine.service.states;
 
 import org.springframework.stereotype.Component;
 
-// TODO - Stopping machine when make coffee
+import net.coffeemachine.to.Info;
+
 @Component
 public class MakeState extends State {
+
+    @Override
+    public Info onStop() {
+        return new Info(machine.turnOf());
+    }
+
+    @Override
+    public Info onRemain() {
+        return new Info(machine.remainsSupplies());
+    }
 
     @Override
     public StateType getType() {

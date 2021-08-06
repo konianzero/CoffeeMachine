@@ -1,8 +1,9 @@
 package net.coffeemachine.service.states;
 
+import org.springframework.stereotype.Component;
+
 import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ReadyState extends State {

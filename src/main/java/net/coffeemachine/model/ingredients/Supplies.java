@@ -1,11 +1,13 @@
 package net.coffeemachine.model.ingredients;
 
+import java.util.StringJoiner;
+
 import lombok.ToString;
-import net.coffeemachine.model.coffee.Coffee;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.StringJoiner;
+import net.coffeemachine.model.coffee.Coffee;
 
 @Component
 @ToString(callSuper = true)
