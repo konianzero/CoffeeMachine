@@ -10,7 +10,7 @@ public class ReadyState extends State {
 
     @Override
     public Info onMake(CoffeeType coffeeType) {
-        return new Info(machine.makeCoffee(coffeeType));
+        return new Info(machine.make(coffeeType));
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ReadyState extends State {
 
     @Override
     public Info onStop() {
-        return new Info(machine.turnOf());
+        return new Info(machine.turnOff());
     }
 
     @Override

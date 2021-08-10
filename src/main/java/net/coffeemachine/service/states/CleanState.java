@@ -9,7 +9,7 @@ public class CleanState extends State {
 
     @Override
     public Info onStop() {
-        return new Info(machine.turnOf());
+        return new Info(machine.turnOff());
     }
 
     @Override
