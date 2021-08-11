@@ -1,12 +1,13 @@
 package net.coffeemachine.service;
 
+import net.coffeemachine.model.coffee.CoffeeType;
 import net.coffeemachine.service.states.State;
 
-public interface Machine<T> {
+public interface Machine {
     State getState();
     String turnOn();
     String turnOff();
     String clean();
-    String make(T type);
+    String make(CoffeeType type);
     String remainsSupplies();
 }

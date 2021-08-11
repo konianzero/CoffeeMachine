@@ -2,19 +2,18 @@ package net.coffeemachine.service.states;
 
 import lombok.Setter;
 import net.coffeemachine.service.Machine;
-import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 // TODO - Refactor State Pattern with Spring -> Spring State machine ?
 @Setter
 public abstract class State {
-    protected Machine<CoffeeType> machine;
+    protected Machine machine;
 
-    public Info onStart()                     { return new Info(getInfo()); }
-    public Info onMake(CoffeeType coffeeType) { return new Info(getInfo()); }
-    public Info onRemain()                    { return new Info(getInfo()); }
-    public Info onClean()                     { return new Info(getInfo()); }
-    public Info onStop()                      { return new Info(getInfo()); }
+    public String onStart()                     { return getInfo(); }
+    public String onMake(CoffeeType coffeeType) { return getInfo(); }
+    public String onRemain()                    { return getInfo(); }
+    public String onClean()                     { return getInfo(); }
+    public String onStop()                      { return getInfo(); }
 
     public abstract StateType getType();
     public abstract String getInfo();

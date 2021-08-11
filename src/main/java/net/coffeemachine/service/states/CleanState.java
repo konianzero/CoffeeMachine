@@ -2,19 +2,17 @@ package net.coffeemachine.service.states;
 
 import org.springframework.stereotype.Component;
 
-import net.coffeemachine.to.Info;
-
 @Component
 public class CleanState extends State {
 
     @Override
-    public Info onStop() {
-        return new Info(machine.turnOff());
+    public String onStop() {
+        return machine.turnOff();
     }
 
     @Override
-    public Info onRemain() {
-        return new Info(machine.remainsSupplies());
+    public String onRemain() {
+        return machine.remainsSupplies();
     }
 
     @Override

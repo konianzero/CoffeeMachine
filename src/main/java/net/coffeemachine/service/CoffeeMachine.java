@@ -5,10 +5,9 @@ import java.util.concurrent.*;
 
 import javax.annotation.PostConstruct;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -25,14 +24,13 @@ import static net.coffeemachine.service.states.StateType.*;
 @DependsOn({"dataSource"})
 @Slf4j
 @RequiredArgsConstructor
-public class CoffeeMachine implements Machine<CoffeeType> {
+public class CoffeeMachine implements Machine {
 
-    @NonNull
-    private ExecutorService coffeeMachineService;
     private final Map<CoffeeType, Coffee> coffeeFactory;
     private final Map<StateType, State> states;
     private final Supplies supplies;
 
+    private ExecutorService coffeeMachineService;
     private State state;
     private CompletableFuture<Void> runningTask;
 
@@ -59,7 +57,6 @@ public class CoffeeMachine implements Machine<CoffeeType> {
     @Override
     public String turnOn() {
         changeStateTo(READY);
-        // TODO - init states twice!
         coffeeMachineService = getCoffeeMachineService();
         log.info("Turn on coffee machine");
         return "Turn on coffee machine";

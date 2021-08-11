@@ -2,30 +2,29 @@ package net.coffeemachine.service.states;
 
 import org.springframework.stereotype.Component;
 
-import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 @Component
 public class ReadyState extends State {
 
     @Override
-    public Info onMake(CoffeeType coffeeType) {
-        return new Info(machine.make(coffeeType));
+    public String onMake(CoffeeType coffeeType) {
+        return machine.make(coffeeType);
     }
 
     @Override
-    public Info onRemain() {
-        return new Info(machine.remainsSupplies());
+    public String onRemain() {
+        return machine.remainsSupplies();
     }
 
     @Override
-    public Info onClean() {
-        return new Info(machine.clean());
+    public String onClean() {
+        return machine.clean();
     }
 
     @Override
-    public Info onStop() {
-        return new Info(machine.turnOff());
+    public String onStop() {
+        return machine.turnOff();
     }
 
     @Override

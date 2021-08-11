@@ -1,12 +1,10 @@
 package net.coffeemachine.to;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 @Getter
 public class Info {
-    private String message;
-
-    public Info(String message) {
-        this.message = message;
-    }
+    private Object message;
 }

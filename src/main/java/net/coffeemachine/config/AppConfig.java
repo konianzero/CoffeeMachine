@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Scope;
 
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.states.State;
 import net.coffeemachine.service.states.StateType;
+import net.coffeemachine.service.states.State;
 
 @Configuration
 @Slf4j
