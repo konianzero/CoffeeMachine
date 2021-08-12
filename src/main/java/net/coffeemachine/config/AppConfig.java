@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 
 import net.coffeemachine.model.coffee.Coffee;
@@ -20,6 +21,7 @@ import net.coffeemachine.service.states.StateType;
 import net.coffeemachine.service.states.State;
 
 @Configuration
+@EnableAspectJAutoProxy
 @Slf4j
 public class AppConfig {
 

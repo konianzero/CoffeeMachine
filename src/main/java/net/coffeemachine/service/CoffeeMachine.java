@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import net.coffeemachine.util.aspect.DatabaseLogging;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ public class CoffeeMachine implements Machine {
     private State state;
     private CompletableFuture<Void> runningTask;
 
+    // TODO - @DatabaseLogging NOT WORK -> set Machine in init()?
     @PostConstruct
     public void init() {
         states.forEach((k, v) -> v.setMachine(this));
@@ -55,6 +57,7 @@ public class CoffeeMachine implements Machine {
     }
 
     @Override
+    @DatabaseLogging
     public String turnOn() {
         changeStateTo(READY);
         coffeeMachineService = getCoffeeMachineService();
@@ -63,6 +66,7 @@ public class CoffeeMachine implements Machine {
     }
 
     @Override
+    @DatabaseLogging
     public String make(CoffeeType coffeeType) {
         changeStateTo(MAKE);
         Coffee coffee = coffeeFactory.get(coffeeType);
@@ -79,6 +83,7 @@ public class CoffeeMachine implements Machine {
     }
 
     @Override
+    @DatabaseLogging
     public String clean() {
         changeStateTo(CLEAN);
         log.info("Start cleaning coffee machine");
@@ -87,6 +92,7 @@ public class CoffeeMachine implements Machine {
     }
 
     @Override
+    @DatabaseLogging
     public String remainsSupplies() {
         String remains = supplies.toString();
         log.info(remains);
@@ -94,6 +100,7 @@ public class CoffeeMachine implements Machine {
     }
 
     @Override
+    @DatabaseLogging
     public String turnOff() {
         changeStateTo(STOP);
         log.info("Turn of coffee machine");
