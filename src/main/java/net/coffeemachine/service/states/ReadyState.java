@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 @Component
-public class ReadyState extends State {
+public class ReadyState extends AbstractState {
 
     @Override
     public String onMake(CoffeeType coffeeType) {

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import net.coffeemachine.model.ingredients.Supplies;
+import net.coffeemachine.model.Supplies;
 import net.coffeemachine.service.states.*;
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
