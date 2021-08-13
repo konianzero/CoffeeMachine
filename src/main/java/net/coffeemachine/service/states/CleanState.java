@@ -3,7 +3,7 @@ package net.coffeemachine.service.states;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CleanState extends State {
+public class CleanState extends AbstractState {
 
     @Override
     public String onStop() {

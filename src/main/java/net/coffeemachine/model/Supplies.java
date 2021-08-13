@@ -1,9 +1,10 @@
-package net.coffeemachine.model.ingredients;
+package net.coffeemachine.model;
 
 import java.util.StringJoiner;
 
 import lombok.ToString;
 
+import net.coffeemachine.model.ingredients.Ingredients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
