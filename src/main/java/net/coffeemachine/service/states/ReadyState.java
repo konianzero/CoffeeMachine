@@ -4,6 +4,10 @@ import org.springframework.stereotype.Component;
 
 import net.coffeemachine.model.coffee.CoffeeType;
 
+/**
+ * @deprecated (use states from StateMachine)
+ */
+@Deprecated(since = "2.1.2")
 @Component
 public class ReadyState extends AbstractState {
 
