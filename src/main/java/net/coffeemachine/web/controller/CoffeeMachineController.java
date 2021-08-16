@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.AllArgsConstructor;
 
+import net.coffeemachine.service.CoffeeMachineCommands;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,30 +19,30 @@ import net.coffeemachine.model.coffee.CoffeeType;
 public class CoffeeMachineController {
     public static final String REST_URL = "/control";
 
-    private final Machine coffeeMachine;
+    private final CoffeeMachineCommands commands;
 
     @PatchMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
     public Info start() {
-        return new Info(coffeeMachine.getState().onStart());
+        return new Info(commands.start());
     }
 
     @PatchMapping("/make")
     public Info make(@RequestParam("coffeeType") CoffeeType coffeeType) {
-        return new Info(coffeeMachine.getState().onMake(coffeeType));
+        return new Info(commands.make(coffeeType));
     }
 
     @PatchMapping("/remains")
     public Info remains() {
-        return new Info(coffeeMachine.getState().onRemain());
+        return new Info(commands.remains());
     }
 
     @PatchMapping("/clean")
     public Info clean() {
-        return new Info(coffeeMachine.getState().onClean());
+        return new Info(commands.clean());
     }
 
     @PatchMapping("/stop")
     public Info stop() {
-        return new Info(coffeeMachine.getState().onStop());
+        return new Info(commands.stop());
     }
 }

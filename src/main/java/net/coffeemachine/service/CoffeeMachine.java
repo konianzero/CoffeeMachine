@@ -58,7 +58,6 @@ public class CoffeeMachine implements Machine {
     public String turnOn() {
         changeStateTo(READY);
         coffeeMachineService = getCoffeeMachineService();
-        log.info("Turn on coffee machine");
         return "Turn on coffee machine";
     }
 
@@ -66,37 +65,37 @@ public class CoffeeMachine implements Machine {
     public String make(CoffeeType coffeeType) {
         changeStateTo(MAKE);
         Coffee coffee = coffeeFactory.get(coffeeType);
-        if (!supplies.isEnoughFor(coffee)) {
-            log.info("Not enough ingredients for {}: {}", coffee.getType(), supplies.getNotEnough());
-            changeStateTo(READY);
-            return "Not enough ingredients";
-        }
-
-        log.info("Start making coffee {}", coffee.getType());
-        supplies.allocate(coffee);
+        String notEnough = allocateSupplies(coffee);
         startTask(coffee.getTimeToMake(), String.format("Coffee %s is ready", coffee.getType()));
-        return "Start making coffee";
+        return notEnough.isEmpty()
+                ? String.format("Start making coffee %s", coffee.getType())
+                : notEnough;
+    }
+
+    private String allocateSupplies(Coffee coffee) {
+        if (!supplies.isEnoughFor(coffee)) {
+            changeStateTo(READY);
+            return String.format("Not enough ingredients for %s: %s", coffee.getType(), supplies.getNotEnough());
+        }
+        supplies.allocate(coffee);
+        return "";
     }
 
     @Override
     public String clean() {
         changeStateTo(CLEAN);
-        log.info("Start cleaning coffee machine");
         startTask(60000, "Coffee machine is clean");
         return "Start cleaning coffee machine";
     }
 
     @Override
     public String remainsSupplies() {
-        String remains = supplies.toString();
-        log.info(remains);
-        return remains;
+        return supplies.toString();
     }
 
     @Override
     public String turnOff() {
         changeStateTo(STOP);
-        log.info("Turn of coffee machine");
         shutDownCoffeeMachineService();
         return "Turn of coffee machine";
     }
