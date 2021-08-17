@@ -2,12 +2,12 @@ package net.coffeemachine.config;
 
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
-import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -20,11 +20,15 @@ import org.springframework.statemachine.transition.Transition;
 
 import net.coffeemachine.service.statemachine.Events;
 import net.coffeemachine.service.statemachine.States;
+import net.coffeemachine.service.statemachine.commands.Commands;
 
 @Configuration
 @EnableStateMachine
+@RequiredArgsConstructor
 @Slf4j
 public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
+
+    private final Commands commands;
 
     @Override
     public void configure(
@@ -43,8 +47,9 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States
 
         states.withStates()
                 .initial(States.READY)
-                .state(States.IN_PROGRESS)
-                .state(States.IDLE);
+                .state(States.IDLE)
+                .state(States.MAKE)
+                .state(States.CLEAN);
     }
 
     @Override
@@ -57,22 +62,42 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States
                     .source(States.IDLE)
                     .target(States.READY)
                     .event(Events.STARTING)
+                    .action(commands.starting())
+//                    .action(commandsMap.get(Events.STARTING))
                     .and()
                 .withExternal()
                     .source(States.READY)
-                    .target(States.IN_PROGRESS)
-                    .event(Events.PROCESSING)
-                    .action(processingAction())
+                    .target(States.MAKE)
+                    .event(Events.MAKING)
+                    .action(commands.making())
                     .and()
                 .withExternal()
-                    .source(States.IN_PROGRESS)
+                    .source(States.READY)
+                    .target(States.CLEAN)
+                    .event(Events.CLEANING)
+                    .action(commands.cleaning())
+                    .and()
+                .withExternal()
+                    .source(States.MAKE)
+                    .target(States.READY)
+                    .event(Events.DONE)
+                    .and()
+                .withExternal()
+                    .source(States.CLEAN)
                     .target(States.READY)
                     .event(Events.DONE)
                     .and()
                 .withExternal()
                     .source(States.READY)
                     .target(States.IDLE)
-                    .event(Events.STOPPING);
+                    .event(Events.STOPPING)
+                    .action(commands.stopping())
+//                    .action(commandsMap.get(Events.STOPPING));
+                    .and()
+                .withInternal()
+                    .source(States.READY)
+                    .event(Events.REMAINING)
+                    .action(commands.remaining());
     }
 
     @Bean
@@ -97,10 +122,5 @@ public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States
                         .orElse(null);
             }
         };
-    }
-
-    // TODO - Move actions in separate classes (net.coffeemachine.service.statemachine.actions)
-    private Action<States, Events> processingAction() {
-        return context -> log.warn(">>> Event with data: {}", context.getMessageHeader("coffee_type"));
     }
 }

@@ -2,7 +2,8 @@ package net.coffeemachine.service.statemachine;
 
 public enum Events {
     STARTING,
-    PROCESSING,
+    MAKING,
+    CLEANING,
     DONE,
     REMAINING,
     STOPPING
