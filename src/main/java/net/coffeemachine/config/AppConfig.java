@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Scope;
 
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.states.StateType;
-import net.coffeemachine.service.states.State;
 
 @Configuration
 @Slf4j
@@ -27,12 +25,6 @@ public class AppConfig {
     public Map<CoffeeType, Coffee> coffeeFactory(List<Coffee> coffeeList) {
         log.info("Start coffee factory");
         return coffeeList.stream().collect(Collectors.toMap(Coffee::getType, Function.identity()));
-    }
-
-    @Bean
-    public Map<StateType, State> coffeeMachineState(List<State> states) {
-        log.info("Initializing coffee machine states");
-        return states.stream().collect(Collectors.toMap(State::getType, Function.identity()));
     }
 
     @Bean
