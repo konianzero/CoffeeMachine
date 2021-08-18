@@ -17,7 +17,7 @@ public class RemainsCommand implements Command {
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        coffeeMachine.remainsSupplies();
+        stateContext.getExtendedState().getVariables().put("supplies", coffeeMachine.remainsSupplies());
     }
 
     @Override
