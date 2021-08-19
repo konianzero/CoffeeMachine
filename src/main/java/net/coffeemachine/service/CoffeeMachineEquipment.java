@@ -3,8 +3,6 @@ package net.coffeemachine.service;
 import java.util.Map;
 import java.util.concurrent.*;
 
-import javax.annotation.PostConstruct;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +27,6 @@ public class CoffeeMachineEquipment implements Machine {
     private ExecutorService equipment;
     @Getter
     private CompletableFuture<Boolean> runningTask;
-
-    @PostConstruct
-    public void init() {
-        turnOn();
-    }
 
     @Lookup
     public ExecutorService startEquipment() {

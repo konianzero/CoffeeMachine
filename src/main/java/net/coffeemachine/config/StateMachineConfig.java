@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -49,7 +50,7 @@ public class StateMachineConfig {
         log.info("Configuring states");
         builder.configureStates()
                 .withStates()
-                    .initial(States.READY)
+                    .initial(States.READY, commandsMap.get(Events.STARTING))
                     .state(States.IDLE)
                     .state(States.MAKE)
                     .state(States.CLEAN);
