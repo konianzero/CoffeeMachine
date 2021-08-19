@@ -100,25 +100,13 @@ public class StateMachineConfig {
     }
 
     @Bean
+    @Profile("prod")
     public StateMachineListener<States, Events> listener() {
         return new StateMachineListenerAdapter<>() {
 
             @Override
-            public void transition(Transition<States, Events> transition) {
-                log.warn(">>> Transition from:{} to:{}",
-                        ofNullableState(transition.getSource()),
-                        ofNullableState(transition.getTarget()));
-            }
-
-            @Override
             public void eventNotAccepted(Message<Events> event) {
-                log.error(">>> Event not accepted: {}", event);
-            }
-
-            private Object ofNullableState(State<States, Events> s) {
-                return Optional.ofNullable(s)
-                        .map(State::getId)
-                        .orElse(null);
+                log.error("Event not accepted: {}", event.getPayload());
             }
         };
     }
