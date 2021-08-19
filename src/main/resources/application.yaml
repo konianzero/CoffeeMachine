@@ -1,3 +1,10 @@
+
+app:
+  doc:
+    title: Coffee machine REST API documentation
+    version: '@version@'
+    description: '@description@'
+
 spring:
   profiles:
     active: dev
