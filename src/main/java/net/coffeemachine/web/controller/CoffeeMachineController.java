@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import lombok.AllArgsConstructor;
 
-import net.coffeemachine.service.CoffeeMachine;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
 import net.coffeemachine.service.statemachine.Events;
+import net.coffeemachine.service.CoffeeMachine;
+import net.coffeemachine.util.WrappedResponse;
 
 @AllArgsConstructor
 @Tag(
@@ -25,6 +26,7 @@ import net.coffeemachine.service.statemachine.Events;
         description = "Managing a coffee machine via the REST API using the following commands"
 )
 @RestController
+@WrappedResponse
 @RequestMapping(value = CoffeeMachineController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CoffeeMachineController {
     public static final String REST_URL = "/control";
@@ -112,7 +114,7 @@ public class CoffeeMachineController {
     @PatchMapping("/clean")
     public Info clean() {
         coffeeMachine.sendEvent(Events.CLEANING);
-        return new Info("Cleaning Machine");
+        return new Info("Cleaning machine");
     }
 
     @Operation(method = "PATCH",
