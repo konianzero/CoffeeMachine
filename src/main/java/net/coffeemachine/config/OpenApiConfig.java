@@ -1,21 +1,26 @@
 package net.coffeemachine.config;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 
 import org.springdoc.core.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@OpenAPIDefinition(
-        info = @Info(
-                title = "Coffee machine REST API documentation",
-                version = "2.1.1",
-                description = "A program for managing a coffee machine through a browser"
-        )
-)
 public class OpenApiConfig {
+
+        @Bean
+        public OpenAPI customOpenApi(@Value("${app.doc.title}") String title,
+                                     @Value("${app.doc.version}") String version,
+                                     @Value("${app.doc.description}") String description) {
+
+                return new OpenAPI().info(new Info()
+                                        .title(title)
+                                        .version(version)
+                                        .description(description));
+        }
 
         @Bean
         public GroupedOpenApi api() {
