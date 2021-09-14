@@ -5,9 +5,7 @@ import java.util.concurrent.*;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import net.coffeemachine.util.aspect.DatabaseLogging;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -15,10 +13,11 @@ import org.springframework.stereotype.Component;
 import net.coffeemachine.model.Supplies;
 import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
+import net.coffeemachine.util.aspect.DatabaseLogging;
 
+@DatabaseLogging
 @Component
 @DependsOn({"dataSource"})
-@Slf4j
 @RequiredArgsConstructor
 public class CoffeeMachineEquipment implements Machine {
     private final Map<CoffeeType, Coffee> coffeeFactory;
@@ -34,14 +33,12 @@ public class CoffeeMachineEquipment implements Machine {
     }
 
     @Override
-    @DatabaseLogging
     public String turnOn() {
         equipment = startEquipment();
         return "Turn on equipment";
     }
 
     @Override
-    @DatabaseLogging
     public String make(CoffeeType coffeeType) {
         Coffee coffee = coffeeFactory.get(coffeeType);
         if (!supplies.isEnoughFor(coffee)) {
@@ -54,20 +51,17 @@ public class CoffeeMachineEquipment implements Machine {
     }
 
     @Override
-    @DatabaseLogging
     public String clean() {
         startTask(6000);
         return "Start cleaning coffee machine";
     }
 
     @Override
-    @DatabaseLogging
     public String remainsSupplies() {
         return supplies.toString();
     }
 
     @Override
-    @DatabaseLogging
     public String turnOff() {
         shutDownCoffeeMachineService();
         return "Turn of equipment";
