@@ -2,8 +2,6 @@ package net.coffeemachine.config;
 
 import lombok.extern.slf4j.Slf4j;
 
-import net.coffeemachine.service.statemachine.Events;
-import net.coffeemachine.service.statemachine.States;
 import org.h2.tools.Server;
 
 import org.springframework.context.annotation.Bean;
@@ -17,6 +15,9 @@ import org.springframework.statemachine.transition.Transition;
 
 import java.sql.SQLException;
 import java.util.Optional;
+
+import net.coffeemachine.config.StateMachineConfig.States;
+import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Configuration
 @Profile("dev")

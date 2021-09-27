@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.statemachine.Events;
 import net.coffeemachine.service.CoffeeMachine;
 import net.coffeemachine.util.WrappedResponse;
+import net.coffeemachine.config.StateMachineConfig.States;
+import net.coffeemachine.config.StateMachineConfig.Events;
 
 @AllArgsConstructor
 @Tag(

@@ -4,11 +4,10 @@ import java.util.StringJoiner;
 
 import lombok.ToString;
 
+import net.coffeemachine.model.coffee.CoffeeRecipe;
 import net.coffeemachine.model.ingredients.Ingredients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import net.coffeemachine.model.coffee.Coffee;
 
 @Component
 @ToString(callSuper = true)
@@ -47,22 +46,22 @@ public final class Supplies extends Ingredients {
         return notEnough != null ? notEnough.toString() : "";
     }
 
-    public void allocate(Coffee coffee) {
-        this.water -= coffee.getWater();
-        this.milk -= coffee.getMilk();
-        this.beans -= coffee.getBeans();
+    public void allocate(CoffeeRecipe coffeeRecipe) {
+        this.water -= coffeeRecipe.getWater();
+        this.milk -= coffeeRecipe.getMilk();
+        this.beans -= coffeeRecipe.getBeans();
         this.cups -= 1;
     }
 
-    public boolean isEnoughFor(Coffee coffee) {
+    public boolean isEnoughFor(CoffeeRecipe coffeeRecipe) {
         notEnough = new StringJoiner(", ");
-        if (this.water - coffee.getWater() < 0) {
+        if (this.water - coffeeRecipe.getWater() < 0) {
             notEnough.add("water");
         }
-        if (this.milk - coffee.getMilk() < 0) {
+        if (this.milk - coffeeRecipe.getMilk() < 0) {
             notEnough.add("milk");
         }
-        if (this.beans - coffee.getBeans() < 0) {
+        if (this.beans - coffeeRecipe.getBeans() < 0) {
             notEnough.add("beans");
         }
         if (this.cups - 1 < 0) {

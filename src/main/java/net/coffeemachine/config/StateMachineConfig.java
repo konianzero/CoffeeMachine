@@ -2,7 +2,6 @@ package net.coffeemachine.config;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,11 +18,7 @@ import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.StateMachineBuilder;
 import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
-import org.springframework.statemachine.state.State;
-import org.springframework.statemachine.transition.Transition;
 
-import net.coffeemachine.service.statemachine.Events;
-import net.coffeemachine.service.statemachine.States;
 import net.coffeemachine.service.statemachine.commands.Command;
 
 @Configuration
@@ -31,6 +26,22 @@ import net.coffeemachine.service.statemachine.commands.Command;
 @RequiredArgsConstructor
 @Slf4j
 public class StateMachineConfig {
+
+    public enum States {
+        READY,
+        IDLE,
+        MAKE,
+        CLEAN
+    }
+
+    public enum Events {
+        STARTING,
+        MAKING,
+        CLEANING,
+        DONE,
+        REMAINING,
+        STOPPING
+    }
 
     @Bean
     @DependsOn("commandsMap")

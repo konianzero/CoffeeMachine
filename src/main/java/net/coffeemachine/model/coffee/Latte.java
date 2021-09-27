@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class Latte extends Coffee {
+public final class Latte extends CoffeeRecipe {
     public Latte(@Value("${latte.time-to-make}") int timeToMake,
                  @Value("${latte.water}") int water,
                  @Value("${latte.milk}") int milk,

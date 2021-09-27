@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
+import net.coffeemachine.model.coffee.CoffeeRecipe;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Scope;
 
-import net.coffeemachine.model.coffee.Coffee;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 @Configuration
@@ -24,9 +24,9 @@ import net.coffeemachine.model.coffee.CoffeeType;
 public class AppConfig {
 
     @Bean
-    public Map<CoffeeType, Coffee> coffeeFactory(List<Coffee> coffeeList) {
+    public Map<CoffeeType, CoffeeRecipe> coffeeFactory(List<CoffeeRecipe> coffeeRecipeList) {
         log.info("Start coffee factory");
-        return coffeeList.stream().collect(Collectors.toMap(Coffee::getType, Function.identity()));
+        return coffeeRecipeList.stream().collect(Collectors.toMap(CoffeeRecipe::getType, Function.identity()));
     }
 
     @Bean

@@ -2,16 +2,17 @@ package net.coffeemachine.service.statemachine.commands;
 
 import lombok.RequiredArgsConstructor;
 
-import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.CoffeeMachineEquipment;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
-import net.coffeemachine.service.Machine;
-import net.coffeemachine.service.statemachine.Events;
-import net.coffeemachine.service.statemachine.States;
 import reactor.core.publisher.Mono;
+
+import net.coffeemachine.service.Machine;
+import net.coffeemachine.config.StateMachineConfig.States;
+import net.coffeemachine.config.StateMachineConfig.Events;
+import net.coffeemachine.model.coffee.CoffeeType;
+import net.coffeemachine.service.CoffeeMachineEquipment;
 
 @Component
 @RequiredArgsConstructor

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Mono;
 
-import net.coffeemachine.service.statemachine.Events;
-import net.coffeemachine.service.statemachine.States;
+import net.coffeemachine.config.StateMachineConfig.States;
+import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Service
 @DependsOn({"coffeeMachineEquipment", "stateMachine"})

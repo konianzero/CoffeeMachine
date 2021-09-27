@@ -13,7 +13,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import net.coffeemachine.model.Supplies;
-import net.coffeemachine.model.coffee.Coffee;
+import net.coffeemachine.model.coffee.CoffeeRecipe;
 import net.coffeemachine.model.coffee.CoffeeType;
 
 @Component
@@ -21,7 +21,7 @@ import net.coffeemachine.model.coffee.CoffeeType;
 @Slf4j
 @RequiredArgsConstructor
 public class CoffeeMachineEquipment implements Machine {
-    private final Map<CoffeeType, Coffee> coffeeFactory;
+    private final Map<CoffeeType, CoffeeRecipe> coffeeFactory;
     private final Supplies supplies;
 
     private ExecutorService equipment;
@@ -43,14 +43,14 @@ public class CoffeeMachineEquipment implements Machine {
     @Override
     @DatabaseLogging
     public String make(CoffeeType coffeeType) {
-        Coffee coffee = coffeeFactory.get(coffeeType);
-        if (!supplies.isEnoughFor(coffee)) {
-            return String.format("Not enough ingredients for %s: %s", coffee.getType(), supplies.getNotEnough());
+        CoffeeRecipe coffeeRecipe = coffeeFactory.get(coffeeType);
+        if (!supplies.isEnoughFor(coffeeRecipe)) {
+            return String.format("Not enough ingredients for %s: %s", coffeeRecipe.getType(), supplies.getNotEnough());
         }
 
-        supplies.allocate(coffee);
-        startTask(coffee.getTimeToMake());
-        return String.format("Start making coffee %s", coffee.getType());
+        supplies.allocate(coffeeRecipe);
+        startTask(coffeeRecipe.getTimeToMake());
+        return String.format("Start making coffee %s", coffeeRecipe.getType());
     }
 
     @Override

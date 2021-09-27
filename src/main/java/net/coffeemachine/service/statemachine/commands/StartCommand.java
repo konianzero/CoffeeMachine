@@ -6,8 +6,8 @@ import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
 import net.coffeemachine.service.Machine;
-import net.coffeemachine.service.statemachine.Events;
-import net.coffeemachine.service.statemachine.States;
+import net.coffeemachine.config.StateMachineConfig.States;
+import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Component
 @RequiredArgsConstructor
