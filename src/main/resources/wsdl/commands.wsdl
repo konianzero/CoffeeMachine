@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="Calculator"
+                  targetNamespace="http://coffeemachine.net/commands"
+                  xmlns:tns="http://coffeemachine.net/commands"
+                  xmlns:types="http://coffeemachine.net/commands"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <wsdl:types>
+        <xsd:schema
+                targetNamespace="http://coffeemachine.net/commands"
+                xmlns:tns="http://coffeemachine.net/commands"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                elementFormDefault="qualified"
+                attributeFormDefault="unqualified"
+                version="1.0">
+
+            <xsd:element name="Action">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="actionType"  type="tns:ActionType" minOccurs="0">
+                            <xsd:annotation>
+                                <xsd:documentation>Тип операции</xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="Response">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="message" type="xsd:string" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:simpleType name="ActionType">
+                <xsd:annotation>
+                    <xsd:documentation>Oперации кофемашины: START,  MAKE, CLEAN, REMAIN, STOP</xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Start"/>
+                    <xsd:enumeration value="Make"/>
+                    <xsd:enumeration value="Clean"/>
+                    <xsd:enumeration value="Remain"/>
+                    <xsd:enumeration value="Stop"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="InputAction">
+        <wsdl:part name="inputData" element="tns:Action" />
+    </wsdl:message>
+    <wsdl:message name="OutputResponse">
+        <wsdl:part name="outputData" element="tns:Response" />
+    </wsdl:message>
+
+    <wsdl:portType name="Commands_PortType">
+        <wsdl:operation name="action">
+            <wsdl:input message="tns:InputAction" />
+            <wsdl:output message="tns:OutputResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="Commands_SoapBinding" type="tns:Commands_PortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="action">
+            <soap:operation soapAction="http://coffeemachine.net/commands/action" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="Commands_Service">
+        <wsdl:documentation>Calculator Service</wsdl:documentation>
+        <wsdl:port name="Commands_PortType" binding="tns:Commands_SoapBinding">
+            <soap:address location="http://localhost:8080/ws/commands" />
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
