@@ -22,8 +22,8 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         return new ServletRegistrationBean<>(messageDispatcherServlet, "/ws/*");
     }
 
-    @Bean
-    public Wsdl11Definition wsdl11Definition(){
+    @Bean(name = "commandsDefinition")
+    public Wsdl11Definition wsdl11Definition() {
         SimpleWsdl11Definition simpleWsdl11Definition = new SimpleWsdl11Definition();
         simpleWsdl11Definition.setWsdl(new ClassPathResource("/wsdl/commands.wsdl"));
         return simpleWsdl11Definition;
