@@ -1,5 +1,6 @@
 package net.coffeemachine.config;
 
+import net.coffeemachine.util.mapper.EventMapper;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +11,8 @@ import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.SimpleWsdl11Definition;
 import org.springframework.ws.wsdl.wsdl11.Wsdl11Definition;
+
+import net.coffeemachine.commands.ObjectFactory;
 
 @EnableWs
 @Configuration
@@ -27,5 +30,10 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         SimpleWsdl11Definition simpleWsdl11Definition = new SimpleWsdl11Definition();
         simpleWsdl11Definition.setWsdl(new ClassPathResource("/wsdl/commands.wsdl"));
         return simpleWsdl11Definition;
+    }
+
+    @Bean
+    public ObjectFactory objectFactory() {
+        return new ObjectFactory();
     }
 }
