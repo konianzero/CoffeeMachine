@@ -2,7 +2,6 @@
 <wsdl:definitions name="Calculator"
                   targetNamespace="http://coffeemachine.net/commands"
                   xmlns:tns="http://coffeemachine.net/commands"
-                  xmlns:types="http://coffeemachine.net/commands"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <wsdl:types>
@@ -17,9 +16,14 @@
             <xsd:element name="Action">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="actionType"  type="tns:ActionType" minOccurs="0">
+                        <xsd:element name="actionType"  type="tns:ActionType">
                             <xsd:annotation>
                                 <xsd:documentation>Тип операции</xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
+                        <xsd:element name="coffeeType"  type="tns:CoffeeType" minOccurs="0">
+                            <xsd:annotation>
+                                <xsd:documentation>Тип кофе, для типа операции MAKE</xsd:documentation>
                             </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
@@ -36,7 +40,7 @@
 
             <xsd:simpleType name="ActionType">
                 <xsd:annotation>
-                    <xsd:documentation>Oперации кофемашины: START,  MAKE, CLEAN, REMAIN, STOP</xsd:documentation>
+                    <xsd:documentation>Oперации кофемашины: START, MAKE, CLEAN, REMAIN, STOP</xsd:documentation>
                 </xsd:annotation>
                 <xsd:restriction base="xsd:string">
                     <xsd:enumeration value="Start"/>
@@ -44,6 +48,17 @@
                     <xsd:enumeration value="Clean"/>
                     <xsd:enumeration value="Remain"/>
                     <xsd:enumeration value="Stop"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+
+            <xsd:simpleType name="CoffeeType">
+                <xsd:annotation>
+                    <xsd:documentation>Кофе: ESPRESSO, LATTE, CAPPUCCINO</xsd:documentation>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="Espresso"/>
+                    <xsd:enumeration value="Latte"/>
+                    <xsd:enumeration value="Cappuccino"/>
                 </xsd:restriction>
             </xsd:simpleType>
 

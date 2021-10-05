@@ -1,7 +1,15 @@
 Управление кофеваркой через браузер
 -----------------------------------
 
-_**Spring Boot**_
+Ветка проекта: `SOAP`
+```shell
+─── master
+    │
+    ├── BPP (Логгирование действий кофемашины в базу данных через Bean Post Processor)
+    │
+    └── SOAP (Управление кофемашиной по SOAP)
+```
+___
 
 Программа по управлению кофеваркой через браузер.
 
@@ -20,8 +28,8 @@ _**Spring Boot**_
 аспекта [DatabaseLoggingAspect.java](src/main/java/net/coffeemachine/util/aspect/DatabaseLoggingAspect.java) и 
 DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).  
 
-Управление осуществляется по средствам HTTP запросов которые обрабатываются 
-[CoffeeMachineController.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineController.java).  
+Управление осуществляется по средствам SOAP ([wsdl](src/main/resources/wsdl/commands.wsdl) и [config](src/main/java/net/coffeemachine/config/WebServiceConfig.java)), сообщения обрабатываются 
+[CoffeeMachineEndpoint.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineEndpoint.java).  
 
 Конфигурация:  
     - [application.yaml](src/main/resources/application.yaml)  

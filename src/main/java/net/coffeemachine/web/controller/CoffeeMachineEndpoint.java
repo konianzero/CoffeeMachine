@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import net.coffeemachine.commands.Action;
+import net.coffeemachine.commands.CommandsService;
 import net.coffeemachine.commands.Response;
 import net.coffeemachine.service.CoffeeMachine;
 
@@ -24,7 +25,6 @@ public class CoffeeMachineEndpoint {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "Action")
     @ResponsePayload
     public Response action(@RequestPayload Action action) {
-        log.info("RequestPayload - input action type: {}", action.getActionType());
-        return coffeeMachine.processAction(action.getActionType());
+        return coffeeMachine.processAction(action);
     }
 }

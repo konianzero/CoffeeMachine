@@ -2,10 +2,11 @@ package net.coffeemachine.service;
 
 import lombok.RequiredArgsConstructor;
 
+import net.coffeemachine.commands.Action;
 import net.coffeemachine.commands.ActionType;
 import net.coffeemachine.commands.ObjectFactory;
 import net.coffeemachine.commands.Response;
-import net.coffeemachine.util.mapper.EventMapper;
+import net.coffeemachine.util.mapper.MapStructMapper;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -21,29 +22,38 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 @DependsOn({"coffeeMachineEquipment", "stateMachine"})
 @RequiredArgsConstructor
 public class CoffeeMachine {
-    private static final EventMapper eventMapper = EventMapper.INSTANCE;
+    private static final MapStructMapper mapper = MapStructMapper.INSTANCE;
 
     private final StateMachine<States, Events> stateMachine;
     private final ObjectFactory objectFactory;
 
-    public Response processAction(ActionType action) {
-        sendEvent(eventMapper.toEventFrom(action));
+    public Response processAction(Action action) {
+        if (action.getActionType().equals(ActionType.MAKE)) {
+            sendEvent(
+                    MessageBuilder
+                    .withPayload(Events.MAKING)
+                    .setHeader("coffee_type", mapper.mapCoffeeType(action.getCoffeeType()))
+                    .build()
+            );
+        } else {
+            sendEvent(mapper.toEventFrom(action.getActionType()));
+        }
         return makeResponse(getStateInfo());
     }
 
-    public void sendEvent(Events event) {
+    private void sendEvent(Events event) {
         sendEvent(MessageBuilder.withPayload(event).build());
     }
 
-    public void sendEvent(Message<Events> message) {
+    private void sendEvent(Message<Events> message) {
         stateMachine.sendEvent(Mono.just(message)).subscribe();
     }
 
-    public String getStateInfo() {
+    private String getStateInfo() {
         return (String) stateMachine.getExtendedState().getVariables().get("info");
     }
 
-    public Response makeResponse(String text) {
+    private Response makeResponse(String text) {
         Response response = objectFactory.createResponse();
         response.setMessage(text);
         return response;

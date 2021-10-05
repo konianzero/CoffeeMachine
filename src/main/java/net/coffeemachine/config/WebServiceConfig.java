@@ -1,6 +1,5 @@
 package net.coffeemachine.config;
 
-import net.coffeemachine.util.mapper.EventMapper;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
