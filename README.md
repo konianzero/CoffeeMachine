@@ -61,7 +61,7 @@ mvn spring-boot:run
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
-URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeemachine/control)
+URL: [http://localhost:8080/coffeemachine/ws](http://localhost:8080/coffeemachine/ws)
 
 [H2 console](http://localhost:8080/coffeemachine/h2-console)
 
@@ -69,14 +69,35 @@ URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeem
 
 ### Документация API
 
-[Swagger Api Documentation](http://localhost:8080/coffeemachine/swagger-ui.html)
+| API                     | Description                                                                     | WSDL                                                           |
+|-------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------|
+| Coffeemachine commands  | Команды для кофеварки (вкл, выкл, сделать кофе, очистка, остатки ингредиентов)  | http://localhost:8080/coffeemachine/ws/commandsDefinition.wsdl |
 
-| API                     | Method | Description            | URL                                   |
-|-------------------------|--------|------------------------|---------------------------------------|
-| CoffeeMachineController | PATCH  | Включить кофеварку     | {URL}/start                           |
-|                         | PATCH  | Сделать кофе           | {URL}/make?coffeeType={coffeeType}    |
-|                         | PATCH  | Остатки ингредиентов   | {URL}/remains                         |
-|                         | PATCH  | Почистить кофеварку    | {URL}/clean                           |
-|                         | PATCH  | Выключить кофеварку    | {URL}/stop                            |
+_*Примеры сообщений*_:
 
+- Включить кофемашину
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:cmd="http://coffeemachine.net/commands">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <cmd:Action>
+            <cmd:actionType>Start</cmd:actionType>
+        </cmd:Action>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
+- Приготовить кофе латте
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:cmd="http://coffeemachine.net/commands">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <cmd:Action>
+            <cmd:actionType>Make</cmd:actionType>
+            <cmd:coffeeType>Latte</cmd:coffeeType>
+        </cmd:Action>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
 ---

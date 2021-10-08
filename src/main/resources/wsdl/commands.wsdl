@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="Calculator"
+<?xml-stylesheet type="text/xsl" href="http://localhost:8080/coffeemachine/wsdl-viewer.xsl"?>
+<wsdl:definitions name="Commands"
                   targetNamespace="http://coffeemachine.net/commands"
                   xmlns:tns="http://coffeemachine.net/commands"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
@@ -93,7 +94,7 @@
     </wsdl:binding>
 
     <wsdl:service name="Commands_Service">
-        <wsdl:documentation>Calculator Service</wsdl:documentation>
+        <wsdl:documentation>Commands Service</wsdl:documentation>
         <wsdl:port name="Commands_PortType" binding="tns:Commands_SoapBinding">
             <soap:address location="http://localhost:8080/ws/commands" />
         </wsdl:port>
