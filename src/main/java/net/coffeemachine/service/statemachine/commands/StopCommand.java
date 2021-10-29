@@ -17,7 +17,8 @@ public class StopCommand implements Command {
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        coffeeMachine.turnOff();
+        String info = coffeeMachine.turnOff();
+        stateContext.getExtendedState().getVariables().put("info", info);
     }
 
     @Override

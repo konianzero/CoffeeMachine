@@ -30,7 +30,7 @@ public class CoffeeMachine {
         stateMachine.sendEvent(Mono.just(message)).subscribe();
     }
 
-    public String getSupplies() {
-        return (String) stateMachine.getExtendedState().getVariables().get("supplies");
+    public String getStateInfo() {
+        return (String) stateMachine.getExtendedState().getVariables().get("info");
     }
 }

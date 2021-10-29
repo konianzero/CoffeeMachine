@@ -17,7 +17,8 @@ public class StartCommand implements Command {
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        coffeeMachine.turnOn();
+        String info = coffeeMachine.turnOn();
+        stateContext.getExtendedState().getVariables().put("info", info);
     }
 
     @Override

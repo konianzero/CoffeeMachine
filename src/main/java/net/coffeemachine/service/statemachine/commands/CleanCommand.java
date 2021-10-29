@@ -21,7 +21,8 @@ public class CleanCommand implements Command {
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        coffeeMachine.clean();
+        String info = coffeeMachine.clean();
+        stateContext.getExtendedState().getVariables().put("info", info);
         ((CoffeeMachineEquipment) coffeeMachine).getRunningTask()
                 .thenAccept(result -> {
                     if (result) {

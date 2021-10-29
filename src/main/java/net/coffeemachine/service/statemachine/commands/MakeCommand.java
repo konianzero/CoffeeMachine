@@ -22,7 +22,8 @@ public class MakeCommand implements Command {
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        coffeeMachine.make((CoffeeType) stateContext.getMessageHeader("coffee_type"));
+        String info = coffeeMachine.make((CoffeeType) stateContext.getMessageHeader("coffee_type"));
+        stateContext.getExtendedState().getVariables().put("info", info);
         ((CoffeeMachineEquipment) coffeeMachine).getRunningTask()
                 .thenAccept(result -> {
                     if (result) {
