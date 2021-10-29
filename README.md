@@ -5,8 +5,6 @@
 ```shell
 ─── master
     │
-    ├── BPP (Логгирование действий кофемашины в базу данных через Bean Post Processor)
-    │
     └── SOAP (Управление кофемашиной по SOAP)
 ```
 ___
@@ -31,6 +29,11 @@ DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).
 Управление осуществляется по средствам SOAP ([wsdl](src/main/resources/wsdl/commands.wsdl) и [config](src/main/java/net/coffeemachine/config/WebServiceConfig.java)), сообщения обрабатываются 
 [CoffeeMachineEndpoint.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineEndpoint.java).  
 
+Сгенерировать код
+```shell
+mvn clean jaxws:wsimport
+```
+
 Конфигурация:  
     - [application.yaml](src/main/resources/application.yaml)  
     - [net.coffeemachine.config](src/main/java/net/coffeemachine/config)  
@@ -52,12 +55,12 @@ DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).
 - ```prod``` База данных PostgreSQL
 
 Запуск
-```
+```shell
 mvn spring-boot:run
 ```
 
 Запуск с профилем ```prod```
-```
+```shell
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
