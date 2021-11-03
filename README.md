@@ -29,10 +29,12 @@ DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).
 Управление осуществляется по средствам SOAP ([wsdl](src/main/resources/wsdl/commands.wsdl) и [config](src/main/java/net/coffeemachine/config/WebServiceConfig.java)), сообщения обрабатываются 
 [CoffeeMachineEndpoint.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineEndpoint.java).  
 
-Сгенерировать код
+Сгенерировать код на основании wsdl:
 ```shell
 mvn clean jaxws:wsimport
 ```
+
+Маппинг классов осуществляется [MapStructMapper](src/main/java/net/coffeemachine/util/mapper/MapStructMapper.java).
 
 Конфигурация:  
     - [application.yaml](src/main/resources/application.yaml)  
