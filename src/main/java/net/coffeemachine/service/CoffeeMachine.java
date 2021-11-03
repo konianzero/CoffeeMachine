@@ -22,10 +22,10 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 @DependsOn({"coffeeMachineEquipment", "stateMachine"})
 @RequiredArgsConstructor
 public class CoffeeMachine {
-    private static final MapStructMapper mapper = MapStructMapper.INSTANCE;
 
     private final StateMachine<States, Events> stateMachine;
     private final ObjectFactory objectFactory;
+    private final MapStructMapper mapper;
 
     public Response processAction(Action action) {
         if (action.getActionType().equals(ActionType.MAKE)) {
