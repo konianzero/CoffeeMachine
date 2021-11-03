@@ -82,7 +82,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- WS -->
+        <!-- Solve javax.jws does not exist error -->
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-ri</artifactId>
