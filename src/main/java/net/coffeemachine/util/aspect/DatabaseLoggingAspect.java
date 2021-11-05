@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
 @Slf4j
 public class DatabaseLoggingAspect {
+    private final Marker inv = MarkerFactory.getMarker("INV");
 
     @Pointcut("@annotation(DatabaseLogging)")
     public void loggableMethods() {
@@ -19,7 +22,7 @@ public class DatabaseLoggingAspect {
     @Around("loggableMethods()")
     public Object logCoffeeMachineActions(ProceedingJoinPoint joinPoint) throws Throwable {
         Object value = joinPoint.proceed();
-        log.info((String) value);
+        log.info(inv, (String) value);
         return value;
     }
 
