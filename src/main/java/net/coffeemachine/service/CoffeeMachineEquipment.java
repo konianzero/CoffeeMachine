@@ -2,6 +2,7 @@ package net.coffeemachine.service;
 
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,11 @@ public class CoffeeMachineEquipment implements Machine {
     public String turnOff() {
         shutDownCoffeeMachineService();
         return "Turn of equipment";
+    }
+
+    @Override
+    public void afterTask(Consumer<Boolean> action) {
+        runningTask.thenAccept(action);
     }
 
     private boolean processing(int millis) {
