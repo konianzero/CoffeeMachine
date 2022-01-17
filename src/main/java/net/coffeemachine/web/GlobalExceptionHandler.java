@@ -3,7 +3,9 @@ package net.coffeemachine.web;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +13,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.coffeemachine.util.exception.AppException;
@@ -22,27 +24,63 @@ import net.coffeemachine.util.exception.AppException;
 @AllArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
     private final ErrorAttributes errorAttributes;
 
+    /**
+     * Handle exception when the DispatcherServlet can't find a handler for a request
+     * (when property "throwExceptionIfNoHandlerFound" is set to true).
+     */
     @NonNull
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers, HttpStatus status, @NonNull WebRequest request) {
-        log.error("handle Exception", ex);
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", ex.getLocalizedMessage());
-        map.put("error", status.getReasonPhrase());
-        map.put("status", status.value());
-        return ResponseEntity.status(status).body(map);
+    protected ResponseEntity<Object> handleNoHandlerFoundException(@NonNull NoHandlerFoundException ex, @NonNull HttpHeaders headers,@NonNull HttpStatus status, @NonNull WebRequest request) {
+        log.error("No Handler Found Exception", ex);
+        return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(), ex.getMessage()), status);
+    }
+
+    /**
+     * Customize the response body of all exception types.
+     * @return ResponseEntity with custom response body
+     */
+    @NonNull
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,@NonNull HttpStatus status, @NonNull WebRequest request) {
+        log.error("Internal Exception", ex);
+        super.handleExceptionInternal(ex, body, headers, status, request);
+        return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(), getRootCause(ex).getMessage()), status);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleAllUncaughtException(WebRequest request, RuntimeException ex) {
+        log.error("Internal Error", ex);
+        return createResponseEntity(getDefaultBody(request, ErrorAttributeOptions.of(), ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(AppException.class)
-    public ResponseEntity<Map<String, Object>> appException(AppException ex, WebRequest req) {
-        log.error("Application Exception", ex);
-        Map<String, Object> body = errorAttributes.getErrorAttributes(req, ex.getOptions());
-        HttpStatus status = ex.getStatus();
+    public ResponseEntity<Map<String, Object>> handleAppException(WebRequest request, AppException ex) {
+        log.error("ApplicationException: {}", ex.getMessage());
+        return createResponseEntity(getDefaultBody(request, ex.getOptions(), ex.getMessage()), ex.getStatus());
+    }
+
+    // *** Helper functions ***
+
+    @SuppressWarnings("unchecked")
+    private <T> ResponseEntity<T> createResponseEntity(Map<String, Object> body, HttpStatus status) {
         body.put("status", status.value());
         body.put("error", status.getReasonPhrase());
-        body.put("message", ex.getMessage());
-        return ResponseEntity.status(status).body(body);
+        return (ResponseEntity<T>) ResponseEntity.status(status).body(body);
+    }
+
+    private Map<String, Object> getDefaultBody(WebRequest request, ErrorAttributeOptions options, String msg) {
+        Map<String, Object> body = errorAttributes.getErrorAttributes(request, options);
+        if (msg != null) {
+            body.put("message", msg);
+        }
+        return body;
+    }
+
+    private Throwable getRootCause(@NonNull Throwable t) {
+        Throwable rootCause = NestedExceptionUtils.getRootCause(t);
+        return rootCause != null ? rootCause : t;
     }
 }
