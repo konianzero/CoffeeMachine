@@ -95,14 +95,18 @@ public class CoffeeMachineEquipment implements Machine {
     }
 
     private void shutDownCoffeeMachineService() {
-        if (runningTask != null) runningTask.cancel(true);
+        // Disable new tasks from being submitted
         equipment.shutdown();
         try {
+            // Wait a while for existing tasks to terminate
             if (!equipment.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                // Cancel currently executing tasks
                 equipment.shutdownNow();
             }
         } catch (InterruptedException ie) {
+            // (Re-)Cancel if current thread also interrupted
             equipment.shutdownNow();
+            // Preserve interrupt status
             Thread.currentThread().interrupt();
         }
     }
