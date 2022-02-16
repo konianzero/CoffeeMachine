@@ -20,6 +20,9 @@
         <java.version>16</java.version>
         <springdoc.version>1.5.6</springdoc.version>
         <spring-statemachine.version>3.0.1</spring-statemachine.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <jaxws.plugin.version>2.3.2</jaxws.plugin.version>
+        <sun.ws.version>3.0.2</sun.ws.version>
     </properties>
 
     <dependencies>
@@ -29,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.statemachine</groupId>
@@ -53,6 +56,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
         <!-- Swagger -->
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -70,6 +80,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Solve javax.jws does not exist error -->
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>2.3.3</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 
@@ -97,6 +115,49 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>2.3.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keep>true</keep>
+                    <wsdlDirectory>${project.basedir}/src/main/resources/wsdl</wsdlDirectory>
+                    <packageName>net.coffeemachine.commands</packageName>
+                    <sourceDestDir>
+                        ${project.build.directory}/generated-sources/jaxws
+                    </sourceDestDir>
                 </configuration>
             </plugin>
         </plugins>

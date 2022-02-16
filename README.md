@@ -1,9 +1,9 @@
 Управление кофеваркой через браузер
 -----------------------------------
 
-Ветка проекта: `master`
+Ветка проекта: `SOAP`
 ```shell
-─── master
+─── master    
     │
     ├── BPP (Логгирование действий кофемашины в базу данных через Bean Post Processor)
     │
@@ -28,8 +28,15 @@ ___
 аспекта [DatabaseLoggingAspect.java](src/main/java/net/coffeemachine/util/aspect/DatabaseLoggingAspect.java) и 
 DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).  
 
-Управление осуществляется по средствам HTTP запросов которые обрабатываются 
-[CoffeeMachineController.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineController.java).  
+Управление осуществляется по средствам SOAP ([wsdl](src/main/resources/wsdl/commands.wsdl) и [config](src/main/java/net/coffeemachine/config/WebServiceConfig.java)), сообщения обрабатываются 
+[CoffeeMachineEndpoint.java](src/main/java/net/coffeemachine/web/controller/CoffeeMachineEndpoint.java).  
+
+Сгенерировать код на основании wsdl:
+```shell
+mvn clean jaxws:wsimport
+```
+
+Маппинг классов осуществляется [MapStructMapper](src/main/java/net/coffeemachine/util/mapper/MapStructMapper.java).
 
 Конфигурация:  
     - [application.yaml](src/main/resources/application.yaml)  
@@ -52,16 +59,16 @@ DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).
 - ```prod``` База данных PostgreSQL
 
 Запуск
-```
+```shell
 mvn spring-boot:run
 ```
 
 Запуск с профилем ```prod```
-```
+```shell
 mvn spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
-URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeemachine/control)
+URL: [http://localhost:8080/coffeemachine/ws](http://localhost:8080/coffeemachine/ws)
 
 [H2 console](http://localhost:8080/coffeemachine/h2-console)
 
@@ -69,14 +76,35 @@ URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeem
 
 ### Документация API
 
-[Swagger Api Documentation](http://localhost:8080/coffeemachine/swagger-ui.html)
+| API                     | Description                                                                     | WSDL                                                           |
+|-------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------|
+| Coffeemachine commands  | Команды для кофеварки (вкл, выкл, сделать кофе, очистка, остатки ингредиентов)  | http://localhost:8080/coffeemachine/ws/commandsDefinition.wsdl |
 
-| API                     | Method | Description            | URL                                   |
-|-------------------------|--------|------------------------|---------------------------------------|
-| CoffeeMachineController | PATCH  | Включить кофеварку     | {URL}/start                           |
-|                         | PATCH  | Сделать кофе           | {URL}/make?coffeeType={coffeeType}    |
-|                         | PATCH  | Остатки ингредиентов   | {URL}/remains                         |
-|                         | PATCH  | Почистить кофеварку    | {URL}/clean                           |
-|                         | PATCH  | Выключить кофеварку    | {URL}/stop                            |
+_*Примеры сообщений*_:
 
+- Включить кофемашину
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:cmd="http://coffeemachine.net/commands">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <cmd:Action>
+            <cmd:actionType>Start</cmd:actionType>
+        </cmd:Action>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
+- Приготовить кофе латте
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:cmd="http://coffeemachine.net/commands">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <cmd:Action>
+            <cmd:actionType>Make</cmd:actionType>
+            <cmd:coffeeType>Latte</cmd:coffeeType>
+        </cmd:Action>
+    </soapenv:Body>
+</soapenv:Envelope>
+```
 ---
