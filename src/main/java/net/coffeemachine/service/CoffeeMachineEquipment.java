@@ -110,6 +110,8 @@ public class CoffeeMachineEquipment implements Machine {
             equipment.shutdownNow();
             // Preserve interrupt status
             Thread.currentThread().interrupt();
+        } finally {
+            equipment = null;
         }
     }
 }
