@@ -58,6 +58,11 @@ mvn clean jaxws:wsimport
 - ```dev``` По умолчанию, база данных H2 (In memory)
 - ```prod``` База данных PostgreSQL
 
+Сгенерировать классы (_wsimport не будет генерировать классы, если файл WSDL не изменился с последней генерации_)
+```shell
+mvn jaxws:wsimport
+```
+
 Запуск
 ```shell
 mvn spring-boot:run
