@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +26,6 @@ public class CoffeeMachineEquipment implements Machine {
     private final ObjectFactory<ExecutorService> prototypeBeanObjectFactory;
 
     private ExecutorService equipment;
-    @Getter
     private CompletableFuture<Boolean> runningTask;
 
     public ExecutorService startEquipment() {
