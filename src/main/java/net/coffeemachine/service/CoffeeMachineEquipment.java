@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import net.coffeemachine.util.aspect.DatabaseLogging;
-import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +24,14 @@ import net.coffeemachine.model.coffee.CoffeeType;
 public class CoffeeMachineEquipment implements Machine {
     private final Map<CoffeeType, CoffeeRecipe> coffeeFactory;
     private final Supplies supplies;
+    private final ObjectFactory<ExecutorService> prototypeBeanObjectFactory;
 
-    // TODO - Remove because of 'prototypeBeanObjectFactory' ???
     private ExecutorService equipment;
     @Getter
     private CompletableFuture<Boolean> runningTask;
 
-    // TODO - Replace with 'prototypeBeanObjectFactory' from BPP branch
-    @Lookup
     public ExecutorService startEquipment() {
-        return null;
+        return prototypeBeanObjectFactory.getObject();
     }
 
     @Override
