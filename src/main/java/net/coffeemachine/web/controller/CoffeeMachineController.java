@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import net.coffeemachine.to.Info;
 import net.coffeemachine.model.coffee.CoffeeType;
-import net.coffeemachine.service.CoffeeMachine;
+import net.coffeemachine.service.CoffeeMachineService;
 import net.coffeemachine.util.WrappedResponse;
 import net.coffeemachine.config.StateMachineConfig.Events;
 
@@ -31,7 +31,7 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 public class CoffeeMachineController {
     public static final String REST_URL = "/control";
 
-    private final CoffeeMachine coffeeMachine;
+    private final CoffeeMachineService coffeeMachineService;
 
     @Operation(method = "PATCH",
             description = "Start coffee machine equipment",
@@ -47,8 +47,8 @@ public class CoffeeMachineController {
     )
     @PatchMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
     public Info start() {
-        coffeeMachine.sendEvent(Events.STARTING);
-        return new Info(coffeeMachine.getStateInfo());
+        coffeeMachineService.sendEvent(Events.STARTING);
+        return new Info(coffeeMachineService.getStateInfo());
     }
 
     @Operation(method = "PATCH",
@@ -72,13 +72,13 @@ public class CoffeeMachineController {
     )
     @PatchMapping("/make")
     public Info make(@RequestParam("coffeeType") CoffeeType coffeeType) {
-        coffeeMachine.sendEvent(
+        coffeeMachineService.sendEvent(
                 MessageBuilder
                         .withPayload(Events.MAKING)
                         .setHeader("coffee_type", coffeeType)
                         .build()
         );
-        return new Info(coffeeMachine.getStateInfo());
+        return new Info(coffeeMachineService.getStateInfo());
     }
 
     @Operation(method = "PATCH",
@@ -95,8 +95,8 @@ public class CoffeeMachineController {
     )
     @PatchMapping("/remains")
     public Info remains() {
-        coffeeMachine.sendEvent(Events.REMAINING);
-        return new Info(coffeeMachine.getStateInfo());
+        coffeeMachineService.sendEvent(Events.REMAINING);
+        return new Info(coffeeMachineService.getStateInfo());
     }
 
     @Operation(method = "PATCH",
@@ -113,8 +113,8 @@ public class CoffeeMachineController {
     )
     @PatchMapping("/clean")
     public Info clean() {
-        coffeeMachine.sendEvent(Events.CLEANING);
-        return new Info(coffeeMachine.getStateInfo());
+        coffeeMachineService.sendEvent(Events.CLEANING);
+        return new Info(coffeeMachineService.getStateInfo());
     }
 
     @Operation(method = "PATCH",
@@ -131,7 +131,7 @@ public class CoffeeMachineController {
     )
     @PatchMapping("/stop")
     public Info stop() {
-        coffeeMachine.sendEvent(Events.STOPPING);
-        return new Info(coffeeMachine.getStateInfo());
+        coffeeMachineService.sendEvent(Events.STOPPING);
+        return new Info(coffeeMachineService.getStateInfo());
     }
 }

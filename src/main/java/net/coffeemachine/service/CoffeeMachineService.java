@@ -18,7 +18,7 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 @DependsOn({"coffeeMachineEquipment", "stateMachine"})
 @Slf4j
 @RequiredArgsConstructor
-public class CoffeeMachine {
+public class CoffeeMachineService {
 
     private final StateMachine<States, Events> stateMachine;
 
