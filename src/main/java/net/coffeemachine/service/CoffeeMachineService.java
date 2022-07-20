@@ -21,7 +21,7 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 @Service
 @DependsOn({"coffeeMachineEquipment", "stateMachine"})
 @RequiredArgsConstructor
-public class CoffeeMachine {
+public class CoffeeMachineService {
 
     private final StateMachine<States, Events> stateMachine;
     private final ObjectFactory objectFactory;
