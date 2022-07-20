@@ -20,7 +20,7 @@ import net.coffeemachine.model.coffee.CoffeeType;
 @DependsOn({"dataSource"})
 @Slf4j
 @RequiredArgsConstructor
-public class CoffeeMachineEquipment implements Machine {
+public class CoffeeMachineEquipment implements CoffeeMachine {
     private final Map<CoffeeType, CoffeeRecipe> coffeeFactory;
     private final Supplies supplies;
     private final ObjectFactory<ExecutorService> prototypeBeanObjectFactory;
