@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class DatabaseLoggingAspect {
     private final Marker inv = MarkerFactory.getMarker("INV");
 
-    @Pointcut("@annotation(DatabaseLogging)")
+    @Pointcut("@annotation(net.coffeemachine.util.aspect.LogToDB)")
     public void loggableMethods() {
     }
 
