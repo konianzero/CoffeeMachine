@@ -31,7 +31,7 @@ public class AppConfig {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public ExecutorService coffeeMachineService() {
+    public ExecutorService coffeeMachineInnerEquipment() {
         log.info("Start coffee machine service");
         return Executors.newSingleThreadExecutor();
     }
