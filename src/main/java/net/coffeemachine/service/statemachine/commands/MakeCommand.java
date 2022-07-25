@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.coffeemachine.model.Supplies;
 import net.coffeemachine.model.coffee.CoffeeRecipe;
 import net.coffeemachine.service.CoffeeMachine;
+import net.coffeemachine.util.aspect.LogToDB;
 import org.springframework.statemachine.StateContext;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class MakeCommand extends Command {
     private final CoffeeMachine coffeeMachine;
 
     @Override
+    @LogToDB
     public void execute(StateContext<States, Events> stateContext) {
         String info = make((CoffeeType) stateContext.getMessageHeader("coffee_type"));
         stateContext.getExtendedState().getVariables().put("info", info);

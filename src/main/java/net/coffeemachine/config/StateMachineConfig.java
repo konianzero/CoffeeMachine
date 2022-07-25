@@ -61,8 +61,10 @@ public class StateMachineConfig {
         log.info("Configuring states");
         builder.configureStates()
                 .withStates()
-                    .initial(States.READY, commandsMap.get(Events.STARTING))
-                    .state(States.IDLE)
+                    //.initial(States.READY, commandsMap.get(Events.STARTING))
+                    //.state(States.IDLE)
+                    .initial(States.IDLE)
+                    .state(States.READY)
                     .state(States.MAKE)
                     .state(States.CLEAN);
 

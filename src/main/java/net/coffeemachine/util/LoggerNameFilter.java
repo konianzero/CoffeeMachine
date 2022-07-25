@@ -8,7 +8,7 @@ public class LoggerNameFilter extends Filter<ILoggingEvent> {
 
     @Override
     public FilterReply decide(ILoggingEvent event) {
-        return (event.getLoggerName().endsWith("DatabaseLoggingAspect") && event.getMarker().contains("INV"))
+        return (event.getLoggerName().endsWith("DatabaseLoggingAspect") && event.getMarker().contains("LDB"))
                 ? FilterReply.ACCEPT
                 : FilterReply.DENY;
     }
