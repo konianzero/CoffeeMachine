@@ -11,13 +11,13 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Component
 @RequiredArgsConstructor
-public class RemainsCommand implements Command {
+public class RemainsCommand extends Command {
 
     private final CoffeeMachine coffeeMachine;
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        stateContext.getExtendedState().getVariables().put("info", coffeeMachine.remainsSupplies());
+        stateContext.getExtendedState().getVariables().put("info", coffeeMachine.supplies());
     }
 
     @Override
