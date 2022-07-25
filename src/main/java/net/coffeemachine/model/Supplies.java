@@ -47,21 +47,21 @@ public final class Supplies extends Ingredients {
     }
 
     public void allocate(CoffeeRecipe coffeeRecipe) {
-        this.water -= coffeeRecipe.getWater();
-        this.milk -= coffeeRecipe.getMilk();
-        this.beans -= coffeeRecipe.getBeans();
+        this.water -= coffeeRecipe.water();
+        this.milk -= coffeeRecipe.milk();
+        this.beans -= coffeeRecipe.beans();
         this.cups -= 1;
     }
 
     public boolean isEnoughFor(CoffeeRecipe coffeeRecipe) {
         notEnough = new StringJoiner(", ");
-        if (this.water - coffeeRecipe.getWater() < 0) {
+        if (this.water - coffeeRecipe.water() < 0) {
             notEnough.add("water");
         }
-        if (this.milk - coffeeRecipe.getMilk() < 0) {
+        if (this.milk - coffeeRecipe.milk() < 0) {
             notEnough.add("milk");
         }
-        if (this.beans - coffeeRecipe.getBeans() < 0) {
+        if (this.beans - coffeeRecipe.beans() < 0) {
             notEnough.add("beans");
         }
         if (this.cups - 1 < 0) {

@@ -48,7 +48,7 @@ public class CoffeeMachineEquipment implements CoffeeMachine {
         }
 
         supplies.allocate(coffeeRecipe);
-        startTask(coffeeRecipe.getTimeToMake());
+        startTask(coffeeRecipe.timeToMake());
         return String.format("Start making coffee %s", coffeeRecipe.getType());
     }
 
