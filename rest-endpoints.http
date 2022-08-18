@@ -1,0 +1,33 @@
+
+# curl -X 'PATCH' -H 'accept: application/json' 'http://localhost:8080/coffeemachine/control/start
+PATCH http://localhost:8080/coffeemachine/control/start
+accept: application/json
+
+###
+
+# curl -X 'PATCH' -H 'accept: application/json' 'http://localhost:8080/coffeemachine/control/make?coffeeType=LATTE'
+PATCH http://localhost:8080/coffeemachine/control/make?coffeeType=LATTE
+accept: application/json
+
+###
+
+# curl -X 'PATCH' -H 'accept: application/json' 'http://localhost:8080/coffeemachine/control/clean
+PATCH http://localhost:8080/coffeemachine/control/clean
+accept: application/json
+
+###
+
+# curl -X 'PATCH' -H 'accept: application/json' 'http://localhost:8080/coffeemachine/control/remains
+PATCH http://localhost:8080/coffeemachine/control/remains
+accept: application/json
+
+###
+
+# curl -X 'PATCH' -H 'accept: application/json' 'http://localhost:8080/coffeemachine/control/stop
+PATCH http://localhost:8080/coffeemachine/control/stop
+accept: application/json
+
+###
+
+
+

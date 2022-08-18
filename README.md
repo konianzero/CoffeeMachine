@@ -39,27 +39,29 @@ DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).
 
 ### Требования
 
-- JDK 16
+- JDK 17
 - maven 3
 
 ---
 
 ### Запуск
 
-Профили:
+* Профили:
     
-- ```dev``` По умолчанию, база данных H2 (In memory)
-- ```prod``` База данных PostgreSQL
+  - ```dev``` По умолчанию, база данных H2 (In memory)
+  - ```prod``` База данных PostgreSQL
 
-Запуск
-```
-mvn spring-boot:run
-```
+* Запуск
+    ```
+    mvn spring-boot:run
+    ```
 
-Запуск с профилем ```prod```
-```
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
-```
+* Запуск с профилем ```prod```
+    ```
+    mvn spring-boot:run -Dspring-boot.run.profiles=prod
+    ```
+
+* Запустить с maven wrapper и указанным JDK: [run.sh](run.sh)
 
 URL: [http://localhost:8080/coffeemachine/control](http://localhost:8080/coffeemachine/control)
 
