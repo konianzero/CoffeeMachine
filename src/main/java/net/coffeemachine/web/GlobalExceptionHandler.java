@@ -59,7 +59,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<Map<String, Object>> handleAppException(WebRequest request, AppException ex) {
         log.error("ApplicationException: {}", ex.getMessage());
-        return createResponseEntity(getDefaultBody(request, ex.getOptions(), ex.getMessage()), ex.getStatus());
+        return createResponseEntity(getDefaultBody(request, ex.options(), ex.getMessage()), ex.getStatus());
     }
 
     // *** Helper functions ***
