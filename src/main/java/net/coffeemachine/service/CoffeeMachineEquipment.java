@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import net.coffeemachine.util.aspect.DatabaseLogging;
+import net.coffeemachine.util.aspect.LogToDB;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -33,14 +33,14 @@ public class CoffeeMachineEquipment implements CoffeeMachine {
     }
 
     @Override
-    @DatabaseLogging
+    @LogToDB
     public String turnOn() {
         equipment = startEquipment();
         return "Turn on equipment";
     }
 
     @Override
-    @DatabaseLogging
+    @LogToDB
     public String make(CoffeeType coffeeType) {
         CoffeeRecipe coffeeRecipe = coffeeFactory.get(coffeeType);
         if (!supplies.isEnoughFor(coffeeRecipe)) {
@@ -53,20 +53,20 @@ public class CoffeeMachineEquipment implements CoffeeMachine {
     }
 
     @Override
-    @DatabaseLogging
+    @LogToDB
     public String clean() {
         startTask(6000);
         return "Start cleaning coffee machine";
     }
 
     @Override
-    @DatabaseLogging
+    @LogToDB
     public String remainsSupplies() {
         return supplies.toString();
     }
 
     @Override
-    @DatabaseLogging
+    @LogToDB
     public String turnOff() {
         shutDownCoffeeMachineService();
         return "Turn of equipment";
