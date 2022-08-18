@@ -14,7 +14,7 @@ public abstract class Command implements Action<States, Events> {
     @Autowired
     protected CoffeeMachine coffeeMachine;
 
-    abstract Events getType();
+    public abstract Events getType();
 
     protected void doneIfSuccess(boolean result, StateContext<States, Events> stateContext) {
         if (result) {
