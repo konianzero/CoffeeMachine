@@ -3,11 +3,9 @@
 
 Ветка проекта: `master`
 ```shell
-─── master
+─── master (REST)
     │
-    ├── BPP (Логгирование действий кофемашины в базу данных через Bean Post Processor)
-    │
-    └── SOAP (Управление кофемашиной по SOAP)
+    └── SOAP
 ```
 ___
 
