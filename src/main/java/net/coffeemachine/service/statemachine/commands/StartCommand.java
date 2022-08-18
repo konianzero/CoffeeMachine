@@ -11,14 +11,14 @@ import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Component
 @RequiredArgsConstructor
-public class StartCommand implements Command {
+public class StartCommand extends Command {
 
     private final CoffeeMachine coffeeMachine;
 
     @Override
     public void execute(StateContext<States, Events> stateContext) {
-        String info = coffeeMachine.turnOn();
-        stateContext.getExtendedState().getVariables().put("info", info);
+        coffeeMachine.turnOn();
+        stateContext.getExtendedState().getVariables().put("info", "Turn on equipment");
     }
 
     @Override

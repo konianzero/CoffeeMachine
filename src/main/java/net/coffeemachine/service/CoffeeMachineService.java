@@ -19,7 +19,7 @@ import net.coffeemachine.config.StateMachineConfig.States;
 import net.coffeemachine.config.StateMachineConfig.Events;
 
 @Service
-@DependsOn({"coffeeMachineEquipment", "stateMachine"})
+@DependsOn({"coffeeMachineImpl", "stateMachine"})
 @RequiredArgsConstructor
 public class CoffeeMachineService {
 
