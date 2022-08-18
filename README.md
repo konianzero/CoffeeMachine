@@ -3,11 +3,9 @@
 
 Ветка проекта: `SOAP`
 ```shell
-─── master    
+─── master (REST)
     │
-    ├── BPP (Логгирование действий кофемашины в базу данных через Bean Post Processor)
-    │
-    └── SOAP (Управление кофемашиной по SOAP)
+    └── SOAP
 ```
 ___
 
@@ -46,32 +44,34 @@ mvn clean jaxws:wsimport
 
 ### Требования
 
-- JDK 16
+- JDK 17
 - maven 3
 
 ---
 
 ### Запуск
 
-Профили:
+* Профили:
     
-- ```dev``` По умолчанию, база данных H2 (In memory)
-- ```prod``` База данных PostgreSQL
+  - ```dev``` По умолчанию, база данных H2 (In memory)
+  - ```prod``` База данных PostgreSQL
 
-Сгенерировать классы (_wsimport не будет генерировать классы, если файл WSDL не изменился с последней генерации_)
-```shell
-mvn jaxws:wsimport
-```
+* Сгенерировать классы (_wsimport не будет генерировать классы, если файл WSDL не изменился с последней генерации_)
+    ```shell
+    mvn jaxws:wsimport
+    ```
 
-Запуск
-```shell
-mvn spring-boot:run
-```
+* Запуск
+    ```
+    mvn spring-boot:run
+    ```
 
-Запуск с профилем ```prod```
-```shell
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
-```
+* Запуск с профилем ```prod```
+    ```
+    mvn spring-boot:run -Dspring-boot.run.profiles=prod
+    ```
+
+* Запустить с maven wrapper и указанным JDK: [run.sh](run.sh)
 
 URL: [http://localhost:8080/coffeemachine/ws](http://localhost:8080/coffeemachine/ws)
 

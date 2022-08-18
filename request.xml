@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:cmd="http://coffeemachine.net/commands">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <cmd:Action>
+            <cmd:actionType>Make</cmd:actionType>
+            <cmd:coffeeType>Latte</cmd:coffeeType>
+        </cmd:Action>
+    </soapenv:Body>
+</soapenv:Envelope>
