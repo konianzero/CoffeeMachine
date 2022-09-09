@@ -21,8 +21,8 @@ ___
 время приготовления для каждого вида находится в [consumables.yaml](src/main/resources/consumables.yaml), эти параметры 
 внедряются в соответствующие классы по средствам `@Value`, например в [Cappuccino.java](src/main/java/net/coffeemachine/model/coffee/Cappuccino.java).
 
-Для эмуляции действий кофемашины используется [CoffeeMachineEquipment.java](src/main/java/net/coffeemachine/service/CoffeeMachineEquipment.java).
-Действия кофемашины логгируются в базу данных по средствам аннотации [@DatabaseLogging](src/main/java/net/coffeemachine/util/aspect/DatabaseLogging.java),
+Для эмуляции действий кофемашины используется [CoffeeMachineImpl.java](src/main/java/net/coffeemachine/service/CoffeeMachineImpl.java).
+Действия кофемашины логгируются в базу данных по средствам аннотации [@LogToDB](src/main/java/net/coffeemachine/util/aspect/LogToDB.java),
 аспекта [DatabaseLoggingAspect.java](src/main/java/net/coffeemachine/util/aspect/DatabaseLoggingAspect.java) и 
 DBAppender`а ([logback-spring.xml](src/main/resources/logback-spring.xml)).  
 
